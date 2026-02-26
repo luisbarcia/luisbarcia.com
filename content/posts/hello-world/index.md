@@ -7,7 +7,7 @@ pinned: true
 toc: false
 ---
 
-Esse site e meu espaco pessoal. Escrevo sobre automacao, AI workflows, desenvolvimento de software e as coisas que penso sobre tecnologia e autonomia digital.
+Esse site e meu espaco pessoal e profissional. Aqui tem meu portfolio, meus projetos e escrevo sobre automacao, AI workflows, desenvolvimento de software e as coisas que penso sobre tecnologia e autonomia digital.
 
 ## Quem sou
 
