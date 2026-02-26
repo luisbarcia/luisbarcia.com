@@ -38,6 +38,10 @@ echo ":: Building with Hugo..."
 cd "$PROJECT_ROOT"
 hugo --gc --minify
 
+# --- Search index ---
+echo ":: Building search index (Pagefind)..."
+npx pagefind --site public
+
 # --- Checksums ---
 echo ":: Generating SHA-256 checksums..."
 BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
