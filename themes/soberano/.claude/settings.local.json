@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:gohugo.io)",
+      "WebFetch(domain:discourse.gohugo.io)",
+      "WebFetch(domain:martijnvanvreeden.nl)",
+      "Bash(cd /Users/luismattos/Documents/Workspaces/luisbarcia/soberano/exampleSite && hugo --gc --minify 2>&1)",
+      "Bash(head:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(hugo:*)",
+      "Bash(git commit:*)",
+      "Bash(pgrep:*)",
+      "Bash(cat:*)"
+    ]
+  },
+  "outputStyle": "Explanatory"
+}

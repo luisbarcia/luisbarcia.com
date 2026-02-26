@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+  Warrant Canary quarterly renewal — launchd agent
+
+  Runs on the 19th of Feb, May, Aug, Nov (1 week before expiration).
+  GPG will prompt for passphrase via pinentry.
+
+  Install:
+    cp scripts/com.luisbarcia.renew-canary.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.luisbarcia.renew-canary.plist
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.luisbarcia.renew-canary.plist
+    rm ~/Library/LaunchAgents/com.luisbarcia.renew-canary.plist
+
+  Manual test:
+    launchctl start com.luisbarcia.renew-canary
+
+  Alternative (crontab):
+    0 10 19 2,5,8,11 * /Users/luismattos/Documents/Workspaces/luisbarcia/luisbarcia.com/scripts/renew-canary.sh
+-->
+<dict>
+  <key>Label</key>
+  <string>com.luisbarcia.renew-canary</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/luismattos/Documents/Workspaces/luisbarcia/luisbarcia.com/scripts/renew-canary.sh</string>
+  </array>
+
+  <!-- Run on the 19th of Feb, May, Aug, Nov at 10:00 -->
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict>
+      <key>Month</key>  <integer>2</integer>
+      <key>Day</key>    <integer>19</integer>
+      <key>Hour</key>   <integer>10</integer>
+      <key>Minute</key> <integer>0</integer>
+    </dict>
+    <dict>
+      <key>Month</key>  <integer>5</integer>
+      <key>Day</key>    <integer>19</integer>
+      <key>Hour</key>   <integer>10</integer>
+      <key>Minute</key> <integer>0</integer>
+    </dict>
+    <dict>
+      <key>Month</key>  <integer>8</integer>
+      <key>Day</key>    <integer>19</integer>
+      <key>Hour</key>   <integer>10</integer>
+      <key>Minute</key> <integer>0</integer>
+    </dict>
+    <dict>
+      <key>Month</key>  <integer>11</integer>
+      <key>Day</key>    <integer>19</integer>
+      <key>Hour</key>   <integer>10</integer>
+      <key>Minute</key> <integer>0</integer>
+    </dict>
+  </array>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/renew-canary.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/renew-canary.err</string>
+</dict>
+</plist>

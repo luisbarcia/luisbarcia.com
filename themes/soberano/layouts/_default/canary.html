@@ -1,0 +1,51 @@
+{{/* layouts/_default/canary.html */}}
+{{/* Warrant canary layout — dates + proof + gpg --clearsign output. */}}
+{{/* Context: single page with layout: canary in front matter. */}}
+{{/* Front matter: expires (date), bitcoin_block (int), bitcoin_hash (string). */}}
+{{/* Body: the gpg --clearsign output (readable text + PGP signature in one block). */}}
+{{/* No "VALID/EXPIRED" badge — verification is the visitor's responsibility. */}}
+
+{{ define "title" }}{{ T "canaryTitle" }} · {{ site.Title }}{{ end }}
+
+{{ define "main" }}
+
+{{ with .Params.expires }}
+{{ $expires := time.AsTime . }}
+
+<article class="canary">
+  <h1>{{ T "canaryTitle" }}</h1>
+
+  {{/* Dates — the visitor judges validity from these */}}
+  <div class="canary__meta">
+    <span>{{ T "canaryLastUpdate" }}: <strong>{{ $.Date.Format "02 Jan 2006" }}</strong></span>
+    <span>{{ T "canaryExpiresOn" }}: <strong>{{ $expires.Format "02 Jan 2006" }}</strong></span>
+  </div>
+
+  {{/* Proof of contemporaneity — Bitcoin block reference */}}
+  {{ if and $.Params.bitcoin_block $.Params.bitcoin_hash }}
+  <div class="canary__proof">
+    <div class="canary__proof-title">{{ T "canaryProof" }}</div>
+    <div class="canary__proof-item">
+      {{ T "canaryBitcoinBlock" }}: <strong>#{{ $.Params.bitcoin_block }}</strong>
+    </div>
+    <div class="canary__proof-item">
+      Hash: <a href="https://mempool.space/block/{{ $.Params.bitcoin_hash }}" target="_blank" rel="noopener noreferrer">{{ $.Params.bitcoin_hash }}</a>
+    </div>
+  </div>
+  {{ end }}
+
+  {{/* Body — gpg --clearsign output (contains readable text + signature) */}}
+  <div class="canary__body post-content">
+    {{ $.Content }}
+  </div>
+</article>
+
+{{ else }}
+{{/* Missing expires — show error to help content authors */}}
+<article class="canary">
+  <h1>{{ T "canaryTitle" }}</h1>
+  <p class="canary__error">{{ T "canaryMissingExpires" }}</p>
+</article>
+{{ end }}
+
+{{ end }}

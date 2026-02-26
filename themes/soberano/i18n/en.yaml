@@ -1,0 +1,101 @@
+# i18n/en.yaml — Soberano theme English strings
+
+newer: "Newer →"
+older: "← Older"
+contents: "Contents"
+tags: "Tags"
+posts: "posts"
+post: "post"
+minRead: "min read"
+nothingPublished: "Nothing published yet."
+searchRequiresJS: "Search requires JavaScript. Browse the [archive](/archive/) instead."
+skipToContent: "Skip to content"
+copyCode: "Copy"
+copied: "Copied!"
+copyError: "Error"
+copyAriaLabel: "Copy code to clipboard"
+backToPortfolio: "← Back to portfolio"
+home: "Home"
+tag: "TAG"
+related: "Related"
+relatedPosts: "Related posts"
+pinned: "Pinned"
+errorNotFound: "ERROR: resource not found in any mirror"
+errorNotFoundMsg: "This page doesn't exist. It may have been removed, relocated, or it never existed in the first place."
+
+# Accessibility labels
+toggleNav: "Toggle navigation"
+mainNav: "Main navigation"
+socialLinks: "Social links"
+footerNav: "Footer navigation"
+pageNav: "Page navigation"
+linkTo: "Link to"
+
+# Portfolio
+projectRole: "Role"
+projectClient: "Client"
+projectPeriod: "Period"
+pgpLabel: "PGP"
+
+# Homepage defaults
+homePosts: "Posts"
+homePostsMore: "All posts →"
+homeProjects: "Recent Projects"
+homeProjectsMore: "All projects →"
+
+# Search
+searchUnavailable: "Search index not available. Run the build pipeline to enable search."
+
+# Sovereignty
+canaryTitle: "Warrant Canary"
+canaryLastUpdate: "Last update"
+canaryExpiresOn: "Expires"
+canaryProof: "Proof of contemporaneity"
+canaryBitcoinBlock: "Bitcoin block"
+pgpTitle: "PGP Public Key"
+pgpFingerprint: "Fingerprint"
+pgpVerify: "Verify on Keyoxide"
+mirrorsTitle: "Mirrors"
+mirrorOnion: "Tor"
+mirrorI2P: "I2P"
+mirrorIPFS: "IPFS"
+mirrorClearnet: "Clearnet"
+sovereigntyCanary: "Canary"
+sovereigntyOnion: "Onion"
+sovereigntyIPFS: "IPFS"
+sovereigntyPGP: "PGP"
+sovereigntyNIP05: "NIP-05"
+contentHashLabel: "Content hash (SHA-256)"
+contentHashAriaLabel: "Content integrity hash"
+contentHashSigned: "signed"
+contentHashSignedTitle: "Manually provided — may be externally signed"
+contentHashAuto: "auto"
+contentHashAutoTitle: "Auto-computed at build time from source content"
+contentHashPgpLabel: "PGP Signature"
+sovereigntyIntegrity: "Integrity"
+
+# Integrity manifest
+integrityTitle: "Integrity Manifest"
+integrityGenerated: "Generated"
+integrityAlgorithm: "Algorithm"
+integritySource: "Source"
+integrityPageCount: "pages"
+integrityPage: "Page"
+integrityMode: "Source"
+integrityRawFormat: "Raw CHECKSUMS format"
+
+# PGP rotation
+pgpRotationTitle: "Key Rotation History"
+pgpRotationActive: "ACTIVE"
+pgpRotationRevoked: "REVOKED"
+
+# Canary error
+canaryMissingExpires: "Canary page requires expires field in front matter."
+
+# Support
+supportTitle: "Support"
+supportEmpty: "Support addresses not configured."
+sovereigntySupport: "Support"
+
+# Archive
+archiveTitle: "Archive"

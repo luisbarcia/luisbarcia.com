@@ -1,0 +1,158 @@
+{{/* layouts/_default/baseof.html */}}
+{{/* Base template for all pages. All personal content comes from site.Params. */}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.Lang | default "en" }}" {{ if site.Params.privacy.system_fonts }}data-system-fonts{{ end }}>
+<head>
+  {{/* Privacy — resolved from preset + individual flag overrides */}}
+  {{ $privacy := partialCached "helpers/resolve-privacy.html" . "privacy" }}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {{/* Description with fallback chain */}}
+  {{ $desc := .Description | default .Summary | default site.Params.description | default "" }}
+  {{ if and (not .Description) (eq .Kind "term") }}
+    {{ $desc = printf "%s — %d %s" .Title (len .Pages) (T "posts") }}
+  {{ else if and (not .Description) (eq .Kind "taxonomy") }}
+    {{ $desc = printf "%s — %s" (.Title | title) (site.Params.description | default site.Title) }}
+  {{ end }}
+  {{ $desc = $desc | plainify | htmlUnescape | strings.TrimRight "\n" | truncate 155 "…" }}
+  <meta name="description" content="{{ $desc }}">
+  {{ if $privacy.show_author_meta }}
+  {{ with site.Params.author }}
+  <meta name="author" content="{{ . }}">
+  {{ end }}
+  {{ end }}
+  {{ if $privacy.show_generator }}
+  <meta name="generator" content="Hugo {{ hugo.Version }}">
+  {{ end }}
+
+  {{/* Robots — block indexing outside production or per-page opt-out */}}
+  {{ if or .Params.noindex (not hugo.IsProduction) (eq .Kind "404") }}
+  <meta name="robots" content="noindex, nofollow">
+  {{ end }}
+
+  {{/* Privacy headers — individually controllable */}}
+  {{ if $privacy.add_referrer_policy }}
+  <meta name="referrer" content="no-referrer">
+  {{ end }}
+  {{ if $privacy.add_dns_prefetch_control }}
+  <meta http-equiv="x-dns-prefetch-control" content="off">
+  {{ end }}
+
+  {{/* Onion-Location — advertise Tor mirror to supporting browsers */}}
+  {{ with site.Params.sovereignty }}{{ with .onion_url }}
+  <meta http-equiv="onion-location" content="{{ . }}">
+  {{ end }}{{ end }}
+
+  {{/* OG Image — resolved via shared partial */}}
+  {{ $ogImg := partialCached "helpers/resolve-image.html" . .RelPermalink }}
+
+  {{/* Open Graph */}}
+  {{ if and $privacy.show_og (ne .Kind "404") }}
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:description" content="{{ $desc }}">
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:site_name" content="{{ site.Title }}">
+  <meta property="og:locale" content="{{ site.Params.og_locale | default site.Language.Lang | default "en_US" }}">
+  {{ if and .IsPage (eq .Section "posts") }}
+  <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{ with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+  {{ with site.Params.author }}<meta property="article:author" content="{{ . }}">{{ end }}
+  {{ with .Params.tags }}{{ range . }}<meta property="article:tag" content="{{ . }}">
+  {{ end }}{{ end }}{{ end }}
+
+  {{ with $ogImg }}
+  <meta property="og:image" content="{{ . }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ $desc }}">
+  {{ if strings.HasSuffix . ".webp" }}<meta property="og:image:type" content="image/webp">
+  {{ else if strings.HasSuffix . ".png" }}<meta property="og:image:type" content="image/png">
+  {{ else if or (strings.HasSuffix . ".jpg") (strings.HasSuffix . ".jpeg") }}<meta property="og:image:type" content="image/jpeg">
+  {{ end }}
+  {{ end }}
+  {{ end }}
+
+  {{/* Twitter Card */}}
+  {{ if and $privacy.show_twitter_cards (ne .Kind "404") }}
+  <meta name="twitter:card" content="{{ if $ogImg }}summary_large_image{{ else }}summary{{ end }}">
+  <meta name="twitter:title" content="{{ .Title }}">
+  <meta name="twitter:description" content="{{ $desc }}">
+  {{ with $ogImg }}<meta name="twitter:image" content="{{ . }}">
+  <meta name="twitter:image:alt" content="{{ $desc }}">{{ end }}
+  {{ with site.Params.social.twitter }}<meta name="twitter:site" content="@{{ . }}">{{ end }}
+  {{ end }}
+
+  {{/* Canonical URL */}}
+  {{ if and $privacy.show_canonical (ne .Kind "404") }}
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ end }}
+
+  {{/* Hreflang for multilingual sites */}}
+  {{ if .IsTranslated }}
+  {{ range .Translations }}
+  <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{ end }}
+  <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  {{ end }}
+
+  {{/* JSON-LD Structured Data — extracted to dedicated partial (skip 404) */}}
+  {{ if ne .Kind "404" }}{{ partial "jsonld.html" . }}{{ end }}
+
+  <title>{{ block "title" . }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+
+  {{/* Font preloads — eliminate FOIT by preloading critical WOFF2 fonts */}}
+  {{ if not site.Params.privacy.system_fonts }}
+  <link rel="preload" href="{{ "fonts/space-mono-v17-latin-regular.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  {{ end }}
+
+  {{/* CSS — minified + fingerprinted + SRI */}}
+  {{ $mainCSS := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}" integrity="{{ $mainCSS.Data.Integrity }}" crossorigin="anonymous">
+  {{/* Syntax CSS — loaded only on pages with code blocks (flagged by render-codeblock.html) */}}
+  {{ $noop := .WordCount }}{{/* Force content rendering so .Store is populated */}}
+  {{ if .Store.Get "hasCode" }}
+  {{ $syntaxCSS := resources.Get "css/syntax.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $syntaxCSS.RelPermalink }}" integrity="{{ $syntaxCSS.Data.Integrity }}" crossorigin="anonymous">
+  {{ end }}
+
+  {{/* RSS autodiscovery */}}
+  {{ range .AlternativeOutputFormats }}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .RelPermalink (printf "%s - %s" site.Title .Name) | safeHTML }}
+  {{ end }}
+
+  {{/* Favicon — configurable paths */}}
+  <link rel="icon" href="{{ site.Params.favicon_svg | default "favicon.svg" | relURL }}" type="image/svg+xml">
+  <link rel="icon" href="{{ site.Params.favicon_png | default "favicon.png" | relURL }}" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="{{ site.Params.apple_touch_icon | default "apple-touch-icon.png" | relURL }}">
+
+  {{/* Extension point for user-injected head content */}}
+  {{ block "head" . }}{{ end }}
+  {{ partial "head/custom.html" . }}
+</head>
+<body data-copy-label="{{ T "copyCode" }}" data-copied-label="{{ T "copied" }}" data-error-label="{{ T "copyError" }}" data-copy-aria="{{ T "copyAriaLabel" }}">
+  {{ partial "hooks/body-start.html" . }}
+  {{/* Accessibility: skip to content */}}
+  <a href="#main-content" class="skip-link">{{ T "skipToContent" }}</a>
+
+  {{ partial "header.html" . }}
+
+  <main class="site-main" id="main-content">
+    <div class="container {{ block "container_class" . }}{{ end }}">
+      {{ block "main" . }}{{ end }}
+    </div>
+  </main>
+
+  {{/* Footer — cached since it's identical on all pages */}}
+  {{ partialCached "footer.html" . "footer" }}
+
+  {{/* JS — minified + fingerprinted + SRI */}}
+  {{ $mainJS := resources.Get "js/main.js" | minify | fingerprint }}
+  <script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}" crossorigin="anonymous" defer></script>
+
+  {{ block "scripts" . }}{{ end }}
+  {{ partial "hooks/body-end.html" . }}
+</body>
+</html>

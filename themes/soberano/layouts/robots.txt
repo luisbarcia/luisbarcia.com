@@ -1,0 +1,13 @@
+{{- /* layouts/robots.txt */ -}}
+{{- /* Dynamic robots.txt — blocks indexing outside production environment. */ -}}
+{{- /* Sitemap directive controlled by show_sitemap_in_robots privacy flag. */ -}}
+{{ $privacy := partialCached "helpers/resolve-privacy.html" . "privacy" -}}
+User-agent: *
+{{ if hugo.IsProduction -}}
+Allow: /
+{{ if $privacy.show_sitemap_in_robots -}}
+Sitemap: {{ "sitemap.xml" | absURL }}
+{{ end -}}
+{{- else -}}
+Disallow: /
+{{- end }}

@@ -1,0 +1,111 @@
+{{/* layouts/_default/single.html */}}
+{{/* Post header: title + date/time. Footer: [tags] + related posts. */}}
+
+{{ define "title" }}{{ .Title }} · {{ site.Title }}{{ end }}
+
+{{ define "main" }}
+
+{{/* Reading progress bar */}}
+<div class="reading-progress" aria-hidden="true">
+  <div class="reading-progress__bar" id="reading-progress"></div>
+</div>
+
+<article>
+  {{/* Post Header — clean: title + meta */}}
+  <header class="post-header">
+    <h1 class="post-header__title">{{ .Title }}</h1>
+
+    {{/* Hero image — Page Resource (leaf bundle) or front matter path */}}
+    {{ $heroImg := .Resources.GetMatch "cover.*" }}
+    {{ if not $heroImg }}{{ $heroImg = .Resources.GetMatch "hero.*" }}{{ end }}
+    {{ if not $heroImg }}{{ with .Params.image }}{{ $heroImg = $.Resources.GetMatch . }}{{ end }}{{ end }}
+    {{ if $heroImg }}
+      {{ partial "components/picture.html" (dict
+        "img"     $heroImg
+        "alt"     (.Params.cover_alt | default .Title)
+        "loading" "eager"
+        "class"   "post-header__image"
+      ) }}
+    {{ else }}
+      {{ with .Params.image }}
+      <img src="{{ . | relURL }}" alt="{{ $.Title }}" class="post-header__image" loading="eager" decoding="async">
+      {{ end }}
+    {{ end }}
+
+    {{ if not .Date.IsZero }}
+    <div class="post-header__meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time>
+      <span>{{ .ReadingTime }} {{ T "minRead" }}</span>
+      {{ $privacy := partialCached "helpers/resolve-privacy.html" . "privacy" }}
+      {{ if $privacy.show_author_meta }}{{ with .Params.author }}<span>{{ . }}</span>{{ end }}{{ end }}
+      {{ with .GetTerms "tags" }}
+      <span class="post-header__tags">
+        {{ range . }}<a href="{{ .RelPermalink }}" class="post-tag">[{{ .LinkTitle }}]</a> {{ end }}
+      </span>
+      {{ end }}
+    </div>
+    {{ end }}
+  </header>
+
+  {{/* Table of Contents */}}
+  {{ if and .Params.toc (gt (len .TableOfContents) 100) }}
+  <div class="toc" role="navigation" aria-label="{{ T "contents" }}">
+    <div class="toc__title">{{ T "contents" }}</div>
+    {{ .TableOfContents }}
+  </div>
+  {{ end }}
+
+  {{/* Content */}}
+  <div class="post-content" data-pagefind-body>
+    {{ .Content }}
+  </div>
+
+  {{/* Content hash — SHA-256 integrity verification */}}
+  {{ partial "components/content-hash.html" . }}
+
+  {{/* Post Footer — nav + related */}}
+  <footer class="post-footer">
+
+    {{/* Prev / Next navigation */}}
+    {{ if eq .Section "posts" }}
+    {{ $older := .PrevInSection }}
+    {{ $newer := .NextInSection }}
+    {{ if or $older $newer }}
+    <nav class="post-nav" aria-label="{{ T "pageNav" }}">
+      {{ with $older }}
+      <a href="{{ .RelPermalink }}" class="post-nav__link post-nav__link--prev">
+        <span class="post-nav__label">{{ T "older" }}</span>
+        <span class="post-nav__title">{{ .Title }}</span>
+      </a>
+      {{ else }}
+      <span class="post-nav__link post-nav__link--prev post-nav__link--disabled"></span>
+      {{ end }}
+      {{ with $newer }}
+      <a href="{{ .RelPermalink }}" class="post-nav__link post-nav__link--next">
+        <span class="post-nav__label">{{ T "newer" }}</span>
+        <span class="post-nav__title">{{ .Title }}</span>
+      </a>
+      {{ end }}
+    </nav>
+    {{ end }}
+    {{ end }}
+
+    {{/* Related posts */}}
+    {{ if eq .Section "posts" }}
+    {{ $related := first 3 (site.RegularPages.Related .) }}
+    {{ with $related }}
+    <aside class="related-posts" aria-label="{{ T "relatedPosts" }}">
+      <div class="section-title">{{ T "related" }}</div>
+      <div class="post-list">
+        {{ range . }}
+        {{ partial "post-item.html" . }}
+        {{ end }}
+      </div>
+    </aside>
+    {{ end }}
+    {{ end }}
+
+  </footer>
+</article>
+
+{{ end }}

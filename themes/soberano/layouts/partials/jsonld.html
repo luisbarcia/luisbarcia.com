@@ -1,0 +1,236 @@
+{{/* layouts/partials/jsonld.html */}}
+{{/* Generates all JSON-LD structured data based on page type and privacy mode. */}}
+{{/* Context: the current page (.). Reads site.Params for all personal data.    */}}
+{{/* Uses printf + safeHTML to avoid Go template JS-context double-encoding.    */}}
+
+{{ $privacy := partialCached "helpers/resolve-privacy.html" . "privacy" }}
+
+{{/* OG Image — resolved via shared partial */}}
+{{ $ogImg := partialCached "helpers/resolve-image.html" . .RelPermalink }}
+
+{{/* Build sameAs array from social params (controlled by show_same_as flag) */}}
+{{ $sameAs := slice }}
+{{ if $privacy.show_same_as }}
+{{ with site.Params.social }}
+  {{ with .github }}{{ $sameAs = $sameAs | append (printf "https://github.com/%s" .) }}{{ end }}
+  {{ with .mastodon }}{{ $sameAs = $sameAs | append . }}{{ end }}
+  {{ with .linkedin }}{{ $sameAs = $sameAs | append (printf "https://linkedin.com/in/%s" .) }}{{ end }}
+  {{ with .twitter }}{{ $sameAs = $sameAs | append (printf "https://twitter.com/%s" .) }}{{ end }}
+{{ end }}
+{{ end }}
+
+{{/* Helper: wrap JSON-LD in script tag, bypassing JS-context escaping */}}
+{{ $jsonldTag := `<script type="application/ld+json">%s</script>` }}
+
+{{/* === HOME PAGE === */}}
+{{ if .IsHome }}
+{{ $website := dict
+  "@type" "WebSite"
+  "@id" (printf "%s#website" site.BaseURL)
+  "name" site.Title
+  "url" site.BaseURL
+  "inLanguage" (site.Language.Lang | default "en")
+}}
+{{ with site.Params.description }}{{ $website = merge $website (dict "description" .) }}{{ end }}
+
+{{ if not $privacy.show_person_schema }}
+{{/* No Person schema — minimal WebSite only */}}
+{{ printf $jsonldTag (dict "@context" "https://schema.org" "@graph" (slice $website) | jsonify) | safeHTML }}
+{{ else }}
+{{/* Include Person schema */}}
+{{ $person := dict "@type" "Person" "@id" (printf "%s#person" site.BaseURL) "name" (site.Params.author | default site.Title) "url" site.BaseURL }}
+{{ with site.Params.description }}{{ $person = merge $person (dict "description" .) }}{{ end }}
+{{ with site.Params.job_title }}{{ $person = merge $person (dict "jobTitle" .) }}{{ end }}
+{{ if $privacy.show_same_as }}
+  {{ if $sameAs }}{{ $person = merge $person (dict "sameAs" $sameAs) }}{{ end }}
+{{ end }}
+{{ if $privacy.show_pgp_in_schema }}
+  {{ with site.Params.crypto }}{{ with .pgp_fingerprint }}
+    {{ $person = merge $person (dict "identifier" (dict "@type" "PropertyValue" "propertyID" "PGP Fingerprint" "value" .)) }}
+  {{ end }}{{ end }}
+{{ end }}
+{{ with site.Params.knows_about }}{{ $person = merge $person (dict "knowsAbout" .) }}{{ end }}
+{{ $website = merge $website (dict "publisher" (dict "@id" (printf "%s#person" site.BaseURL))) }}
+{{ with site.GetPage "/search" }}
+  {{ $website = merge $website (dict "potentialAction" (dict
+    "@type" "SearchAction"
+    "target" (dict "@type" "EntryPoint" "urlTemplate" (printf "%ssearch/?q={search_term_string}" site.BaseURL))
+    "query-input" "required name=search_term_string"
+  )) }}
+{{ end }}
+
+{{ printf $jsonldTag (dict "@context" "https://schema.org" "@graph" (slice $website $person) | jsonify) | safeHTML }}
+{{ end }}{{/* end person schema check */}}
+
+{{/* === BLOG POSTS === */}}
+{{ else if and .IsPage (eq .Section "posts") }}
+{{ $post := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "url" .Permalink
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "wordCount" .WordCount
+  "timeRequired" (printf "PT%dM" .ReadingTime)
+  "inLanguage" (site.Language.Lang | default "en")
+  "isPartOf" (dict "@type" "Blog" "@id" (printf "%sposts/#blog" site.BaseURL) "name" (printf "%s Blog" site.Title) "url" (printf "%sposts/" site.BaseURL))
+  "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+}}
+{{ if $privacy.show_author_in_posts }}
+  {{ $post = merge $post (dict "author" (dict "@type" "Person" "@id" (printf "%s#person" site.BaseURL) "name" (site.Params.author | default site.Title) "url" site.BaseURL)) }}
+  {{ $post = merge $post (dict "publisher" (dict "@type" "Person" "@id" (printf "%s#person" site.BaseURL) "name" (site.Params.author | default site.Title))) }}
+{{ end }}
+{{ with $ogImg }}{{ $post = merge $post (dict "image" .) }}{{ else }}
+  {{ with site.Params.og_image }}{{ $post = merge $post (dict "image" (. | absURL)) }}{{ end }}
+{{ end }}
+{{ with .Description }}{{ $post = merge $post (dict "description" .) }}{{ end }}
+{{ with .Lastmod }}{{ $post = merge $post (dict "dateModified" (.Format "2006-01-02T15:04:05Z07:00")) }}{{ end }}
+{{ with .Params.tags }}{{ $post = merge $post (dict "keywords" .) }}{{ end }}
+{{ printf $jsonldTag ($post | jsonify) | safeHTML }}
+
+{{/* === PORTFOLIO PROJECTS === */}}
+{{ else if and .IsPage (eq .Section "portfolio") }}
+{{ $work := dict
+  "@context" "https://schema.org"
+  "@type" "CreativeWork"
+  "name" .Title
+  "url" .Permalink
+  "dateCreated" (.Date.Format "2006-01-02")
+}}
+{{ if $privacy.show_author_in_posts }}
+  {{ $work = merge $work (dict "author" (dict "@type" "Person" "@id" (printf "%s#person" site.BaseURL) "name" (site.Params.author | default site.Title))) }}
+{{ end }}
+{{ with $ogImg }}{{ $work = merge $work (dict "image" .) }}{{ end }}
+{{ with .Description }}{{ $work = merge $work (dict "description" .) }}{{ end }}
+{{ with .Params.category }}{{ $work = merge $work (dict "genre" .) }}{{ end }}
+{{ with .Params.stack }}{{ $work = merge $work (dict "keywords" .) }}{{ end }}
+{{ printf $jsonldTag ($work | jsonify) | safeHTML }}
+
+{{/* === ABOUT PAGE (nil-safe .File check) === */}}
+{{ else if and .IsPage .File (eq .File.ContentBaseName "about") }}
+{{ if $privacy.show_person_schema }}
+{{ $aboutPerson := dict "@type" "Person" "@id" (printf "%s#person" site.BaseURL) "name" (site.Params.author | default site.Title) "url" site.BaseURL }}
+{{ with site.Params.description }}{{ $aboutPerson = merge $aboutPerson (dict "description" .) }}{{ end }}
+{{ with site.Params.job_title }}{{ $aboutPerson = merge $aboutPerson (dict "jobTitle" .) }}{{ end }}
+{{ if $privacy.show_same_as }}
+  {{ if $sameAs }}{{ $aboutPerson = merge $aboutPerson (dict "sameAs" $sameAs) }}{{ end }}
+{{ end }}
+{{ with site.Params.knows_about }}{{ $aboutPerson = merge $aboutPerson (dict "knowsAbout" .) }}{{ end }}
+{{ printf $jsonldTag (dict "@context" "https://schema.org" "@type" "ProfilePage" "mainEntity" $aboutPerson | jsonify) | safeHTML }}
+{{ end }}
+
+{{/* === POSTS LIST (Blog section) === */}}
+{{ else if and .IsSection (eq .Section "posts") }}
+{{ $blogPosts := slice }}
+{{ range first 10 .Pages.ByDate.Reverse }}
+  {{ $blogPosts = $blogPosts | append (dict "@type" "BlogPosting" "headline" .Title "url" .Permalink "datePublished" (.Date.Format "2006-01-02")) }}
+{{ end }}
+{{ printf $jsonldTag (dict
+  "@context" "https://schema.org"
+  "@type" "Blog"
+  "@id" (printf "%s#blog" .Permalink)
+  "name" (printf "%s Blog" site.Title)
+  "url" .Permalink
+  "blogPost" $blogPosts
+| jsonify) | safeHTML }}
+
+{{/* === PORTFOLIO LIST (ItemList) === */}}
+{{ else if and .IsSection (eq .Section "portfolio") }}
+{{ $items := slice }}
+{{ range $i, $p := .Pages }}
+  {{ $items = $items | append (dict "@type" "ListItem" "position" (add $i 1) "name" $p.Title "url" $p.Permalink) }}
+{{ end }}
+{{ printf $jsonldTag (dict
+  "@context" "https://schema.org"
+  "@type" "ItemList"
+  "name" .Title
+  "url" .Permalink
+  "numberOfItems" (len .Pages)
+  "itemListElement" $items
+| jsonify) | safeHTML }}
+
+{{/* === OTHER PAGES (generic) === */}}
+{{ else if .IsPage }}
+{{ $page := dict
+  "@context" "https://schema.org"
+  "@type" "WebPage"
+  "name" .Title
+  "url" .Permalink
+  "isPartOf" (dict "@id" (printf "%s#website" site.BaseURL))
+}}
+{{ if $privacy.show_author_in_pages }}
+  {{ $page = merge $page (dict "author" (dict "@type" "Person" "@id" (printf "%s#person" site.BaseURL) "name" (site.Params.author | default site.Title))) }}
+{{ end }}
+{{ with .Description }}{{ $page = merge $page (dict "description" .) }}{{ end }}
+{{ printf $jsonldTag ($page | jsonify) | safeHTML }}
+
+{{/* === TAXONOMY TERM (e.g., /tags/go/) === */}}
+{{ else if eq .Kind "term" }}
+{{ $termPage := dict
+  "@context" "https://schema.org"
+  "@type" "WebPage"
+  "name" .Title
+  "url" .Permalink
+  "isPartOf" (dict "@id" (printf "%s#website" site.BaseURL))
+  "description" (printf "%s — %d %s" .Title (len .Pages) (T "posts"))
+}}
+{{ $aboutRefs := slice }}
+{{ range first 10 .Pages }}
+  {{ $aboutRefs = $aboutRefs | append (dict "@type" "BlogPosting" "headline" .Title "url" .Permalink) }}
+{{ end }}
+{{ if $aboutRefs }}{{ $termPage = merge $termPage (dict "about" $aboutRefs) }}{{ end }}
+{{ printf $jsonldTag ($termPage | jsonify) | safeHTML }}
+
+{{/* === FALLBACK (list pages, taxonomies) === */}}
+{{ else }}
+{{ printf $jsonldTag (dict "@context" "https://schema.org" "@type" "WebPage" "name" .Title "url" .Permalink "isPartOf" (dict "@id" (printf "%s#website" site.BaseURL)) | jsonify) | safeHTML }}
+{{ end }}
+
+{{/* BreadcrumbList — all pages except home */}}
+{{ if not .IsHome }}
+{{ $breadcrumbs := slice (dict "@type" "ListItem" "position" 1 "name" (T "home") "item" site.BaseURL) }}
+{{ if .IsSection }}
+  {{ $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" 2 "name" .Title "item" .Permalink) }}
+{{ else if and .IsPage .Section }}
+  {{ $sectionPage := site.GetPage .Section }}
+  {{ with $sectionPage }}
+  {{ $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" 2 "name" .Title "item" .Permalink) }}
+  {{ end }}
+  {{ $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" 3 "name" .Title "item" .Permalink) }}
+{{ else if eq .Kind "term" }}
+  {{ $pos := 2 }}
+  {{ with .Parent }}
+  {{ $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) }}
+  {{ $pos = add $pos 1 }}
+  {{ end }}
+  {{ $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) }}
+{{ else }}
+  {{ $breadcrumbs = $breadcrumbs | append (dict "@type" "ListItem" "position" 2 "name" .Title "item" .Permalink) }}
+{{ end }}
+{{ printf $jsonldTag (dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $breadcrumbs | jsonify) | safeHTML }}
+{{ end }}
+
+{{/* Additional schema: FAQ or HowTo (via front matter) */}}
+{{ if eq .Params.schema_type "FAQ" }}
+{{ with .Params.faq_items }}
+{{ $faqItems := slice }}
+{{ range . }}
+  {{ $faqItems = $faqItems | append (dict
+    "@type" "Question"
+    "name" .question
+    "acceptedAnswer" (dict "@type" "Answer" "text" .answer)
+  ) }}
+{{ end }}
+{{ printf $jsonldTag (dict "@context" "https://schema.org" "@type" "FAQPage" "mainEntity" $faqItems | jsonify) | safeHTML }}
+{{ end }}
+{{ else if eq .Params.schema_type "HowTo" }}
+{{ with .Params.howto_steps }}
+{{ $steps := slice }}
+{{ range $i, $s := . }}
+  {{ $steps = $steps | append (dict "@type" "HowToStep" "position" (add $i 1) "name" .name "text" .text) }}
+{{ end }}
+{{ $howto := dict "@context" "https://schema.org" "@type" "HowTo" "name" $.Title "step" $steps }}
+{{ with $.Description }}{{ $howto = merge $howto (dict "description" .) }}{{ end }}
+{{ printf $jsonldTag ($howto | jsonify) | safeHTML }}
+{{ end }}
+{{ end }}

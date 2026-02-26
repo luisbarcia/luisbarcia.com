@@ -1,0 +1,288 @@
+# ==========================================================================
+# Soberano Theme — Example Configuration
+# Copy this file to your project root and customize.
+# ==========================================================================
+
+baseURL = "https://example.com/"
+languageCode = "en"
+title = "Soberano"
+enableRobotsTXT = true
+enableInlineShortcodes = false
+disableHugoGeneratorInject = true
+
+# When running from exampleSite/, use:
+#   hugo server -D
+# The module replacement below maps the theme import to the parent directory.
+
+[module]
+  replacements = "github.com/luisbarcia/soberano -> ../.."
+  [[module.imports]]
+    path = "github.com/luisbarcia/soberano"
+
+# Pagination (Hugo v0.128+)
+[pagination]
+  pagerSize = 10
+
+# Taxonomies
+[taxonomies]
+  tag = "tags"
+
+# Outputs — enable JSON index for search
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+
+# ==========================================================================
+# MENUS
+# All navigation is menu-driven. No hardcoded links in the theme.
+# ==========================================================================
+
+# Main navigation (header)
+[[menus.main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 1
+
+[[menus.main]]
+  name = "Portfolio"
+  url = "/portfolio/"
+  weight = 2
+
+[[menus.main]]
+  name = "About"
+  url = "/about/"
+  weight = 3
+
+[[menus.main]]
+  name = "Search"
+  url = "/search/"
+  weight = 4
+
+# Footer navigation
+[[menus.footer]]
+  name = "Search"
+  url = "/search/"
+  weight = 1
+
+[[menus.footer]]
+  name = "RSS"
+  url = "/index.xml"
+  weight = 2
+
+[[menus.footer]]
+  name = "Source"
+  url = "https://github.com/yourname/yoursite"
+  weight = 3
+  [menus.footer.params]
+    external = true
+
+# ==========================================================================
+# PARAMS — Theme configuration
+# ==========================================================================
+[params]
+  # --- Identity ---
+  description = "Your site description for SEO and social sharing."
+  author = "Your Name"
+  tagline = "// your tagline here"
+
+  # --- SEO ---
+  # Default Open Graph image (place in static/)
+  og_image = "og-default.png"
+  # Open Graph locale override (default: site language)
+  # og_locale = "en_US"
+
+  # --- JSON-LD Person schema ---
+  job_title = "Software Engineer"
+  knows_about = ["Automation", "AI Workflows", "Self-hosted Infrastructure"]
+
+  # --- Homepage Hero ---
+  # Supports HTML (e.g. <em> for accent color)
+  hero_title = "Your <em>Title</em> Here"
+  hero_subtitle = "A brief description of what this site is about."
+
+  # --- Homepage sections ---
+  # Number of posts/projects shown on homepage
+  homepage_posts = 5
+  homepage_posts_title = "Posts"
+  homepage_posts_more = "All posts →"
+  homepage_projects = 3
+  homepage_projects_title = "Recent Projects"
+  homepage_projects_more = "All projects →"
+
+  # --- Homepage Axiom block (optional) ---
+  [params.axiom]
+    label = "Core axiom"
+    text = "Your core belief or principle here."
+
+  # --- Homepage Manifesto block (optional) ---
+  [params.manifesto]
+    label = "SYNTHESIS"
+    lines = [
+      "First line of your manifesto.",
+      "Second line of your manifesto.",
+    ]
+
+  # --- Footer ---
+  # footer_left = "Your Name · Powered by Hugo"
+  # footer_right = "Your custom right-side text"
+
+  # --- Social links (footer + JSON-LD sameAs) ---
+  [params.social]
+    # email = "you@example.com"
+    github = "yourname"
+    # nostr = "npub1..."
+    # mastodon = "https://mastodon.social/@yourname"
+    # matrix = "@you:matrix.org"
+    # xmpp = "you@your-server.org"
+    # simplex = "https://simplex.chat/contact#..."
+    # signal = "+1234567890"
+    # linkedin = "yourname"
+    # twitter = "yourname"
+
+  # --- Crypto / PGP (optional) ---
+  [params.crypto]
+    pgp_fingerprint = "XXXX XXXX XXXX XXXX XXXX  XXXX XXXX XXXX XXXX XXXX"
+    pgp_key_url = "/pgp/"
+    # keyoxide_url = "https://keyoxide.org/FINGERPRINT"
+
+  # --- Crypto support / donations (optional) ---
+  # Each entry is a payment method. The "privacy" field controls visibility:
+  #   "paranoid" = visible in ALL modes (privacy-preserving crypto)
+  #   "hardened" = visible in standard + hardened
+  #   "standard" = visible only in standard mode (default)
+  [[params.crypto.support]]
+    name = "Bitcoin"
+    label = "on-chain"
+    address = "bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    description = "For larger contributions. The transaction is recorded on the blockchain."
+    privacy = "standard"
+
+  [[params.crypto.support]]
+    name = "Lightning"
+    label = "⚡"
+    address = "yourname@getalby.com"
+    description = "Instant micropayments. Read a post and found it useful? Send some sats."
+    privacy = "standard"
+
+  [[params.crypto.support]]
+    name = "Monero"
+    label = "XMR"
+    address = "4xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    description = "Private by default. Nobody knows who sent it."
+    privacy = "paranoid"
+
+  # --- Sovereignty features (optional) ---
+  # [params.sovereignty]
+  #   onion_url = "http://youronionaddress.onion"
+  #   ipfs_cid = "QmYourCIDHere"
+  #   ipfs_gateway = "https://gateway.ipfs.io"
+  #
+  #   [[params.sovereignty.mirrors]]
+  #     url = "http://youronion.onion"
+  #     type = "onion"
+  #     label = "Tor Hidden Service"
+  #
+  #   [[params.sovereignty.mirrors]]
+  #     url = "https://gateway.ipfs.io/ipfs/QmXXX"
+  #     type = "ipfs"
+  #     label = "IPFS Gateway"
+
+  # --- Nostr NIP-05 verification (optional) ---
+  # [params.nostr]
+  #   name = "_"
+  #   pubkey = "hex_pubkey_here"
+  #   relays = ["wss://relay.damus.io", "wss://nos.lol"]
+
+  # --- Privacy system (preset + flag overrides) ---
+  # Choose a preset for sensible defaults, then override individual flags.
+  # Presets: "standard" (default), "hardened", "paranoid"
+  # Legacy "mode" key is still supported for backwards compatibility.
+  #
+  # [params.privacy]
+  #   preset = "standard"
+  #   system_fonts = false  # Use system fonts instead of self-hosted
+  #
+  # All 21 flags (shown with standard defaults):
+  #   show_author_meta = true          # <meta name="author">
+  #   show_generator = true            # <meta name="generator">
+  #   show_og = true                   # Open Graph meta tags
+  #   show_twitter_cards = true        # Twitter Card meta tags
+  #   show_canonical = true            # <link rel="canonical">
+  #   add_referrer_policy = false      # <meta name="referrer" content="no-referrer">
+  #   add_dns_prefetch_control = false # <meta http-equiv="x-dns-prefetch-control">
+  #   show_person_schema = true        # JSON-LD Person schema on home/about
+  #   show_same_as = true              # sameAs social links in JSON-LD
+  #   show_pgp_in_schema = true        # PGP fingerprint in JSON-LD Person
+  #   show_author_in_posts = true      # author in BlogPosting/CreativeWork JSON-LD
+  #   show_author_in_pages = true      # author in generic page JSON-LD
+  #   show_social_centralized = true   # email, github, linkedin, twitter, signal
+  #   show_social_federated = true     # nostr, mastodon, matrix, xmpp, simplex
+  #   show_pgp_badge = true            # PGP sovereignty badge in footer
+  #   show_nip05_badge = true          # NIP-05 sovereignty badge in footer
+  #   show_theme_credit = true         # "Soberano" theme link in footer
+  #   show_pgp_fingerprint = true      # PGP fingerprint text in footer
+  #   show_rss_generator = true        # <generator> in RSS feed
+  #   show_rss_author = true           # <author>/<managingEditor> in RSS
+  #   show_sitemap_in_robots = true    # Sitemap directive in robots.txt
+  #
+  # Example: Paranoid preset but keep PGP visible (pseudonymous persona):
+  # [params.privacy]
+  #   preset = "paranoid"
+  #   show_pgp_badge = true
+  #   show_pgp_fingerprint = true
+  #
+  # Example: Standard but suppress Twitter Cards:
+  # [params.privacy]
+  #   preset = "standard"
+  #   show_twitter_cards = false
+
+  # --- Favicon paths (defaults shown, override if needed) ---
+  # favicon_svg = "favicon.svg"
+  # favicon_png = "favicon.png"
+  # apple_touch_icon = "apple-touch-icon.png"
+
+# ==========================================================================
+# MARKUP — Syntax highlighting
+# ==========================================================================
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = false
+
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+
+# ==========================================================================
+# RELATED CONTENT — Configures the "Related posts" section
+# ==========================================================================
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+    applyFilter = true
+
+  [[related.indices]]
+    name = "date"
+    weight = 10
+
+# ==========================================================================
+# SECURITY — Hugo security restrictions (recommended)
+# ==========================================================================
+[security]
+  [security.exec]
+    allow = ['^(dart-)?sass(-embedded)?$', '^go$', '^git$']
+    osEnv = ['(?i)^(PATH|PATHEXT|APPDATA|TMP|TEMP|TERM|GOPATH|HOME|USERPROFILE)$']
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$', '^NODE_ENV$']
+  [security.http]
+    methods = ['(?i)GET|POST']
+    urls = ['none']

@@ -1,0 +1,182 @@
+# ==========================================================================
+# luisbarcia.com — Site Configuration
+# Theme: Soberano (local em themes/soberano)
+# ==========================================================================
+
+baseURL = "https://luisbarcia.com/"
+languageCode = "pt-BR"
+title = "Luis Barcia"
+theme = "soberano"
+enableRobotsTXT = true
+enableInlineShortcodes = false
+disableHugoGeneratorInject = true
+
+# Pagination (Hugo v0.128+)
+[pagination]
+  pagerSize = 10
+
+# Taxonomies
+[taxonomies]
+  tag = "tags"
+
+# Outputs — enable JSON index for search
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+
+# ==========================================================================
+# MENUS
+# ==========================================================================
+
+# Main navigation (header)
+[[menus.main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 1
+
+[[menus.main]]
+  name = "Portfolio"
+  url = "/portfolio/"
+  weight = 2
+
+[[menus.main]]
+  name = "Sobre"
+  url = "/about/"
+  weight = 3
+
+[[menus.main]]
+  name = "Busca"
+  url = "/search/"
+  weight = 4
+
+# Footer navigation
+[[menus.footer]]
+  name = "Busca"
+  url = "/search/"
+  weight = 1
+
+[[menus.footer]]
+  name = "RSS"
+  url = "/index.xml"
+  weight = 2
+
+[[menus.footer]]
+  name = "Source"
+  url = "https://github.com/luisbarcia/luisbarcia.com"
+  weight = 3
+  [menus.footer.params]
+    external = true
+
+# ==========================================================================
+# PARAMS — Theme configuration
+# ==========================================================================
+[params]
+  # --- Identity ---
+  description = "Software engineer. I automate what shouldn't be done by humans and self-host what shouldn't be owned by corporations."
+  author = "Luis Barcia"
+  tagline = "// build, automate, own"
+
+  # --- SEO ---
+  og_image = "og-default.png"
+
+  # --- JSON-LD Person schema ---
+  job_title = "Software Engineer"
+  knows_about = ["Business Process Automation", "AI Workflows", "API Integration", "B2B Product Development", "Backend Development", "Python", "JavaScript", "Node.js"]
+
+  # --- Homepage Hero ---
+  hero_title = "Luis <em>Barcia</em>"
+  hero_subtitle = "Software engineer. I automate what shouldn't be done by humans and self-host what shouldn't be owned by corporations."
+
+  # --- Homepage sections ---
+  homepage_posts = 5
+  homepage_posts_title = "Posts"
+  homepage_posts_more = "Todos os posts →"
+  homepage_projects = 3
+  homepage_projects_title = "Projetos Recentes"
+  homepage_projects_more = "Todos os projetos →"
+
+  # --- Homepage Axiom block ---
+  [params.axiom]
+    label = "Axiom"
+    text = "Don't trust. Verify."
+
+  # --- Homepage Manifesto block ---
+  [params.manifesto]
+    label = "PRINCIPLES"
+    lines = [
+      "Automate what humans shouldn't repeat.",
+      "Don't trust. Verify.",
+      "Ship fast, but ship things that last.",
+    ]
+
+  # --- Social links (footer + JSON-LD sameAs) ---
+  [params.social]
+    github = "luisbarcia"
+    # email = "barcia.me@proton.me"
+    # nostr = "npub1..."
+    mastodon = "https://mastodon.social/@luisbarcia"
+    matrix = "@luisbarcia:matrix.org"
+    # linkedin = ""
+
+  # --- Crypto / PGP ---
+  [params.crypto]
+    pgp_fingerprint = "3C3A 9612 FCDC 0242 652E  CFD3 B004 471F 5EC7 A1E7"
+    pgp_key_url = "/pgp/"
+
+  # --- Sovereignty features ---
+  [params.sovereignty]
+    onion_url = "http://luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion"
+    [[params.sovereignty.mirrors]]
+      url = "http://luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion"
+      type = "onion"
+      label = "Tor Hidden Service"
+
+  # --- Privacy system ---
+  # [params.privacy]
+  #   preset = "standard"
+
+# ==========================================================================
+# MARKUP
+# ==========================================================================
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = false
+
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+
+# ==========================================================================
+# RELATED CONTENT
+# ==========================================================================
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+    applyFilter = true
+
+  [[related.indices]]
+    name = "date"
+    weight = 10
+
+# ==========================================================================
+# SECURITY
+# ==========================================================================
+[security]
+  [security.exec]
+    allow = ['^(dart-)?sass(-embedded)?$', '^go$', '^git$']
+    osEnv = ['(?i)^(PATH|PATHEXT|APPDATA|TMP|TEMP|TERM|GOPATH|HOME|USERPROFILE)$']
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$', '^NODE_ENV$']
+  [security.http]
+    methods = ['(?i)GET|POST']
+    urls = ['none']

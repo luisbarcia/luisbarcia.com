@@ -1,0 +1,204 @@
+{{/* layouts/partials/footer.html */}}
+{{/* Footer partial. Social from site.Params.social (SVG icons), nav from site.Menus.footer. */}}
+
+<footer class="site-footer">
+  <div class="container">
+
+    {{/* Social links row — SVG icons with sr-only labels */}}
+    {{/* Unified: centralized links (email, github, linkedin, twitter, signal) */}}
+    {{/* and federated links (nostr, mastodon, matrix, xmpp, simplex) are */}}
+    {{/* independently controlled by privacy flags. */}}
+    {{ $privacy := partialCached "helpers/resolve-privacy.html" . "privacy" }}
+    {{ with site.Params.social }}
+    {{ $hasCentralized := and $privacy.show_social_centralized (or .email .github .linkedin .twitter .signal) }}
+    {{ $hasFederated := and $privacy.show_social_federated (or .nostr .mastodon .matrix .xmpp .simplex) }}
+    {{ if or $hasCentralized $hasFederated }}
+    <nav class="site-footer__social" aria-label="{{ T "socialLinks" }}">
+
+      {{/* Centralized networks */}}
+      {{ if $privacy.show_social_centralized }}
+      {{ with .email }}
+      <a href="mailto:{{ . }}" title="Email">
+        {{ partial "icons/email.html" }}
+        <span class="sr-only">Email</span>
+      </a>
+      {{ end }}
+      {{ with .github }}
+      <a href="https://github.com/{{ . }}" target="_blank" rel="noopener noreferrer" title="GitHub">
+        {{ partial "icons/github.html" }}
+        <span class="sr-only">GitHub</span>
+      </a>
+      {{ end }}
+      {{ with .linkedin }}
+      <a href="https://linkedin.com/in/{{ . }}" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+        {{ partial "icons/linkedin.html" }}
+        <span class="sr-only">LinkedIn</span>
+      </a>
+      {{ end }}
+      {{ with .twitter }}
+      <a href="https://twitter.com/{{ . }}" target="_blank" rel="noopener noreferrer" title="X (Twitter)">
+        {{ partial "icons/twitter.html" }}
+        <span class="sr-only">X (Twitter)</span>
+      </a>
+      {{ end }}
+      {{ with .signal }}
+      <a href="https://signal.me/#p/{{ . }}" target="_blank" rel="noopener noreferrer" title="Signal">
+        {{ partial "icons/signal.html" }}
+        <span class="sr-only">Signal</span>
+      </a>
+      {{ end }}
+      {{ end }}
+
+      {{/* Federated / pseudonymous networks */}}
+      {{ if $privacy.show_social_federated }}
+      {{ with .nostr }}
+      <a href="https://njump.me/{{ . }}" target="_blank" rel="noopener noreferrer" title="Nostr">
+        {{ partial "icons/nostr.html" }}
+        <span class="sr-only">Nostr</span>
+      </a>
+      {{ end }}
+      {{ with .mastodon }}
+      <a href="{{ . }}" target="_blank" rel="me noopener noreferrer" title="Mastodon">
+        {{ partial "icons/mastodon.html" }}
+        <span class="sr-only">Mastodon</span>
+      </a>
+      {{ end }}
+      {{ with .matrix }}
+      <a href="https://matrix.to/#/{{ . }}" target="_blank" rel="noopener noreferrer" title="Matrix">
+        {{ partial "icons/matrix.html" }}
+        <span class="sr-only">Matrix</span>
+      </a>
+      {{ end }}
+      {{ with .xmpp }}
+      <a href="xmpp:{{ . }}" target="_blank" rel="noopener noreferrer" title="XMPP">
+        {{ partial "icons/xmpp.html" }}
+        <span class="sr-only">XMPP</span>
+      </a>
+      {{ end }}
+      {{ with .simplex }}
+      <a href="{{ . }}" target="_blank" rel="noopener noreferrer" title="SimpleX">
+        {{ partial "icons/simplex.html" }}
+        <span class="sr-only">SimpleX</span>
+      </a>
+      {{ end }}
+      {{ end }}
+
+    </nav>
+    {{ end }}
+    {{ end }}
+
+    {{/* Navigation row — from menu "footer" + auto-detected archive */}}
+    {{ $archivePage := site.GetPage "/archive" }}
+    {{ if or site.Menus.footer $archivePage }}
+    <nav class="site-footer__nav" aria-label="{{ T "footerNav" }}">
+      {{ range $i, $item := site.Menus.footer }}
+        {{ if $i }}<span aria-hidden="true">·</span>{{ end }}
+        <a href="{{ .URL | relURL }}"
+           {{ if .Params.external }}target="_blank" rel="noopener noreferrer"{{ end }}>
+          {{ .Name }}
+        </a>
+      {{ end }}
+      {{/* Archive — auto-detected, no menu entry needed */}}
+      {{ with $archivePage }}
+        {{ if site.Menus.footer }}<span aria-hidden="true">·</span>{{ end }}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{ end }}
+    </nav>
+    {{ end }}
+
+    {{/* Sovereignty indicators — public transparency badges */}}
+    {{ $hasSovereignty := or
+      (site.GetPage "/canary")
+      (site.GetPage "/integrity")
+      (site.GetPage "/support")
+      (site.Params.sovereignty.onion_url)
+      (site.Params.sovereignty.ipfs_cid)
+      (site.Params.crypto.pgp_fingerprint)
+      (site.Params.nostr.pubkey)
+    }}
+    {{ if $hasSovereignty }}
+    <div class="site-footer__sovereignty">
+      {{/* Canary — link only, no status judgment */}}
+      {{ with site.GetPage "/canary" }}
+        <a href="{{ .RelPermalink }}" class="sovereignty-badge">
+          <span class="sovereignty-badge__dot"></span>
+          {{ T "sovereigntyCanary" }}
+        </a>
+      {{ end }}
+      {{/* Onion */}}
+      {{ with site.Params.sovereignty }}{{ with .onion_url }}
+      <span class="sovereignty-badge">
+        <span class="sovereignty-badge__dot"></span>
+        {{ T "sovereigntyOnion" }}
+      </span>
+      {{ end }}{{ end }}
+      {{/* IPFS */}}
+      {{ with site.Params.sovereignty }}{{ with .ipfs_cid }}
+      <span class="sovereignty-badge">
+        <span class="sovereignty-badge__dot"></span>
+        {{ T "sovereigntyIPFS" }}
+      </span>
+      {{ end }}{{ end }}
+      {{/* PGP — controlled by show_pgp_badge flag */}}
+      {{ if $privacy.show_pgp_badge }}
+      {{ with site.Params.crypto }}{{ with .pgp_fingerprint }}
+        {{ $pgpURL := site.Params.crypto.pgp_key_url }}
+        {{ if $pgpURL }}
+        <a href="{{ $pgpURL | relURL }}" class="sovereignty-badge">
+          <span class="sovereignty-badge__dot"></span>
+          {{ T "sovereigntyPGP" }}
+        </a>
+        {{ else }}
+        <span class="sovereignty-badge">
+          <span class="sovereignty-badge__dot"></span>
+          {{ T "sovereigntyPGP" }}
+        </span>
+        {{ end }}
+      {{ end }}{{ end }}
+      {{ end }}
+      {{/* Integrity manifest */}}
+      {{ with site.GetPage "/integrity" }}
+      <a href="{{ .RelPermalink }}" class="sovereignty-badge">
+        <span class="sovereignty-badge__dot"></span>
+        {{ T "sovereigntyIntegrity" | default "Integrity" }}
+      </a>
+      {{ end }}
+      {{/* NIP-05 — controlled by show_nip05_badge flag */}}
+      {{ if $privacy.show_nip05_badge }}
+      {{ with site.Params.nostr }}{{ with .pubkey }}
+      <a href="https://njump.me/{{ . }}" target="_blank" rel="noopener noreferrer" class="sovereignty-badge">
+        <span class="sovereignty-badge__dot"></span>
+        {{ T "sovereigntyNIP05" }}
+      </a>
+      {{ end }}{{ end }}
+      {{ end }}
+      {{/* Support */}}
+      {{ with site.GetPage "/support" }}
+        <a href="{{ .RelPermalink }}" class="sovereignty-badge">
+          <span class="sovereignty-badge__dot"></span>
+          {{ T "sovereigntySupport" | default "Support" }}
+        </a>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    {{/* Copyright row — theme attribution controlled by show_theme_credit */}}
+    <div class="site-footer__inner">
+      {{ if $privacy.show_theme_credit }}
+      <span>
+        <a class="site-footer__theme-link" href="https://github.com/luisbarcia/soberano" target="_blank" rel="noopener noreferrer">Soberano</a> · {{ now.Year }}
+      </span>
+      {{ else }}
+      <span>{{ now.Year }}</span>
+      {{ end }}
+    </div>
+
+    {{/* PGP fingerprint in footer — controlled by show_pgp_fingerprint */}}
+    {{ if $privacy.show_pgp_fingerprint }}
+    {{ with site.Params.crypto }}{{ with .pgp_fingerprint }}
+    <div class="site-footer__pgp">{{ T "pgpLabel" }}: {{ . }}</div>
+    {{ end }}{{ end }}
+    {{ end }}
+
+  </div>
+</footer>
