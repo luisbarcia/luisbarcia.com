@@ -16,3 +16,7 @@ Thumbs.db
 
 # Node (if ever used for tooling)
 node_modules/
+
+# Claude Code
+CLAUDE.local.md
+.claude/settings.local.json
