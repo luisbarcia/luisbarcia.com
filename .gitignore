@@ -20,3 +20,6 @@ node_modules/
 # Claude Code
 CLAUDE.local.md
 .claude/settings.local.json
+
+# Soberano theme (cloned repo — ignore non-theme files)
+
