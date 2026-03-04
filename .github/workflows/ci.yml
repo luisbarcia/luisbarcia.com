@@ -6,14 +6,20 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: false
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -30,7 +36,7 @@ jobs:
         run: hugo --gc --minify
 
       - name: Build search index
-        run: npx pagefind --site public
+        run: npx pagefind@1 --site public
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main'
