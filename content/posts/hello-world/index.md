@@ -2,25 +2,23 @@
 title: "Hello World"
 date: 2026-02-26
 tags: ["meta"]
-description: "Primeiro post. Quem sou, o que faco e por que este site existe."
+description: "Primeiro post. Por que esse site existe e o que pretendo publicar aqui."
 pinned: true
 toc: false
 ---
 
-Esse site e meu espaco pessoal e profissional. Aqui tem meu portfolio, meus projetos e escrevo sobre automacao, AI workflows, desenvolvimento de software e as coisas que penso sobre tecnologia e autonomia digital.
+Precisava de um lugar meu. Sem Medium, sem Substack, sem depender de plataforma que pode sumir amanha ou mudar as regras do jogo. Dominio proprio, VPS propria, acessivel via Tor. Sem analytics, sem cookies, sem JavaScript de terceiros.
 
-## Quem sou
+## Sobre o que eu escrevo
 
-Software engineer. Trabalho com automacao de processos, integracao de sistemas via API e workflows com AI. Atualmente liderando a frente tech de produtos B2B na [Uuba](https://uuba.com.br).
+Trabalho com engenharia de software. Automatizo coisas, integro sistemas, coloco AI pra funcionar em producao. Esse lado vai aparecer aqui.
 
-## Por que este site?
+Mas tambem penso bastante sobre privacidade, criptografia, codigo aberto, descentralizacao. Sobre quem controla a infraestrutura que a gente usa todo dia e por que isso importa. Esse lado tambem vai aparecer.
 
-Porque eu nao publico em plataforma dos outros. Meu conteudo, meu dominio, minhas regras. Sem analytics, sem tracking, sem paywall.
+As vezes os dois se misturam. Um post sobre LLMs pode virar uma discussao sobre soberania. Um post sobre criptografia pode ser sobre politica. Faz parte.
 
-{{< axiom label="Axiom" >}}
-Don't trust. Verify.
-{{< /axiom >}}
+## O combinado
 
-## O que vem por aqui
+Conteudo regular, bilingue. Sem paywall, sem newsletter. O codigo do site e do [tema](https://github.com/luisbarcia/soberano) e aberto. A [chave PGP](/pgp/) esta publicada. O [warrant canary](/canary/) esta ativo.
 
-Posts sobre automacao com AI, integracao de APIs, Python, Node.js e o que mais fizer sentido compartilhar. Sem calendario, sem obrigacao — quando tiver algo util, publico.
+Era isso. Primeiro bloco minerado.
