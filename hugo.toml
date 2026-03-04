@@ -107,10 +107,10 @@ disableHugoGeneratorInject = true
   [params.manifesto]
     label = "Manifesto"
     lines = [
-      "Se voce nao pode auditar, nao pode confiar.",
-      "Automatize o tedioso. Seja dono do que importa.",
-      "Privacidade e o padrao. Vigilancia e a excecao.",
-      "Construa para durar. Publique para existir.",
+      "If you can't audit it, you can't trust it.",
+      "Automate the boring. Own the critical.",
+      "Privacy is the default. Surveillance is the exception.",
+      "Build to last. Publish to exist.",
     ]
 
   # --- Social links (footer + JSON-LD sameAs) ---
