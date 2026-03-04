@@ -88,7 +88,7 @@ disableHugoGeneratorInject = true
 
   # --- Homepage Hero ---
   hero_title = "Luis <em>Barcia</em>"
-  hero_subtitle = "Engenheiro de software. Automatizo o que humanos nao deveriam repetir e hospedo o que corporacoes nao deveriam controlar."
+  hero_subtitle = "Engenheiro de software full stack com foco em back-end — automacao, integracoes de APIs e produtos B2B para operacoes em escala."
 
   # --- Homepage sections ---
   homepage_posts = 5
