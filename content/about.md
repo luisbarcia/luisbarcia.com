@@ -1,29 +1,40 @@
 ---
 title: "Sobre"
-description: "Sobre Luis Barcia — software engineer, automacao com AI e desenvolvimento de produtos B2B."
+description: "Luis Barcia — engenheiro de software full stack, automacao de processos, integracoes de APIs e produtos B2B."
 ---
 
 ## Quem sou
 
-Software engineer. Trabalho com automacao de processos, integracao de sistemas via API e workflows com AI.
+Luis Barcia. Engenheiro de software full stack com foco em back-end.
 
-Atualmente lidero a frente tech da [Uuba](https://uuba.com.br), onde estou construindo produtos e servicos B2B. No dia a dia, automatizo o que nao deveria ser feito por humanos.
+Trabalho na [Uuba](https://uuba.com.br), onde construo produtos e servicos B2B para operacoes de BPO. No dia a dia, automatizo processos financeiros, integro sistemas via API e coloco AI para resolver problemas que nao deveriam depender de planilha e boa vontade.
 
-## O que eu faco
+Nao tenho 15 anos de mercado. Tenho obsessao por resolver problemas e entregar coisas que funcionam.
 
-- **Automacao de processos** — transformo fluxos manuais e caoticos em sistemas que rodam sozinhos
-- **AI Workflows** — integro LLMs e AI em automacoes praticas que resolvem problemas reais
-- **Integracao de APIs** — conecto sistemas que nao foram feitos para conversar entre si
-- **Backend** — Node.js, Python, JavaScript
+## O que eu construo
+
+- **Produtos B2B** — desenvolvimento end-to-end de aplicacoes para operacoes financeiras e BPO
+- **Engenharia de integracao** — arquitetura e implementacao de pipelines entre ERPs, gateways de pagamento e sistemas legados
+- **AI engineering** — agentes e workflows com LLMs integrados em producao, nao em prova de conceito
+- **Back-end** — APIs, servicos e infraestrutura que sustentam operacoes em escala
+
+**Stack:** Python, Node.js, JavaScript, n8n, Linux.
 
 ## Filosofia
 
-Acredito que tecnologia deve servir ao individuo, nao o contrario. Publico no meu proprio dominio, hospedo o que posso na minha propria infraestrutura e nao peco permissao para existir na internet.
+Tecnologia serve ao individuo. Nao ao Estado, nao a corporacao, nao a plataforma.
 
-{{< axiom label="Axiom" >}}
-Don't trust. Verify.
-{{< /axiom >}}
+Publico no meu proprio dominio. Hospedo na minha propria infraestrutura. Nao uso analytics, nao rastreio visitantes, nao dependo de servicos de terceiros para existir na internet. Se voce esta lendo isto pelo [Tor](/mirrors/), melhor ainda.
+
+Criptografia nao e feature — e direito. Privacidade nao e preferencia — e padrao. Self-hosting nao e hobby — e a diferenca entre ser dono e ser inquilino.
+
+Esse site e a prova pratica. Roda em Hugo com um [tema que eu mesmo construi](https://github.com/luisbarcia/soberano), servido por nginx em VPS propria, acessivel via clearnet e [Tor Hidden Service](/mirrors/). Zero dependencias externas. Zero JavaScript de terceiros. Codigo aberto.
 
 ## Contato
 
-A melhor forma de falar comigo e pelo [GitHub](https://github.com/luisbarcia). Se precisar de comunicacao segura, minha [chave PGP](/pgp/) esta disponivel.
+- **GitHub:** [luisbarcia](https://github.com/luisbarcia)
+- **Mastodon:** [@luisbarcia@mastodon.social](https://mastodon.social/@luisbarcia)
+- **Matrix:** [@luisbarcia:matrix.org](https://matrix.to/#/@luisbarcia:matrix.org)
+- **PGP:** [chave publica](/pgp/) — para comunicacao cifrada
+
+Nao uso redes centralizadas. Se precisar falar comigo, os canais acima sao os canais certos.
