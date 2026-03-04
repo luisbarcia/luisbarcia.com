@@ -101,16 +101,16 @@ disableHugoGeneratorInject = true
   # --- Homepage Axiom block ---
   [params.axiom]
     label = "Axiom"
-    text = "Sovereignty is not a feature. It's a prerequisite."
+    text = "Don't trust. Verify."
 
   # --- Homepage Manifesto block ---
   [params.manifesto]
     label = "Manifesto"
     lines = [
-      "If you can't audit it, you can't trust it.",
-      "Automate the boring. Own the critical.",
-      "Privacy is the default. Surveillance is the exception.",
-      "Build to last. Publish to exist.",
+      "Trusted third parties are security holes. — Nick Szabo",
+      "If privacy is outlawed, only outlaws will have privacy. — Phil Zimmermann",
+      "Talk is cheap. Show me the code. — Linus Torvalds",
+      "The Net interprets censorship as damage and routes around it. — John Gilmore",
     ]
 
   # --- Social links (footer + JSON-LD sameAs) ---
