@@ -75,9 +75,9 @@ disableHugoGeneratorInject = true
 # ==========================================================================
 [params]
   # --- Identity ---
-  description = "Software engineer. I automate what shouldn't be done by humans and self-host what shouldn't be owned by corporations."
+  description = "Engenheiro de software. Escrevo sobre automacao, privacidade e infraestrutura que voce controla."
   author = "Luis Barcia"
-  tagline = "// build, automate, own"
+  tagline = "// automate the boring. own the critical."
 
   # --- SEO ---
   og_image = "og-default.png"
@@ -88,7 +88,7 @@ disableHugoGeneratorInject = true
 
   # --- Homepage Hero ---
   hero_title = "Luis <em>Barcia</em>"
-  hero_subtitle = "Software engineer. I automate what shouldn't be done by humans and self-host what shouldn't be owned by corporations."
+  hero_subtitle = "Engenheiro de software. Automatizo o que humanos nao deveriam repetir e hospedo o que corporacoes nao deveriam controlar."
 
   # --- Homepage sections ---
   homepage_posts = 5
@@ -101,15 +101,16 @@ disableHugoGeneratorInject = true
   # --- Homepage Axiom block ---
   [params.axiom]
     label = "Axiom"
-    text = "Don't trust. Verify."
+    text = "Sovereignty is not a feature. It's a prerequisite."
 
   # --- Homepage Manifesto block ---
   [params.manifesto]
-    label = "PRINCIPLES"
+    label = "Manifesto"
     lines = [
-      "Automate what humans shouldn't repeat.",
-      "Don't trust. Verify.",
-      "Ship fast, but ship things that last.",
+      "Se voce nao pode auditar, nao pode confiar.",
+      "Automatize o tedioso. Seja dono do que importa.",
+      "Privacidade e o padrao. Vigilancia e a excecao.",
+      "Construa para durar. Publique para existir.",
     ]
 
   # --- Social links (footer + JSON-LD sameAs) ---
