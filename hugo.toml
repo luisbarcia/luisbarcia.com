@@ -1,12 +1,10 @@
 # ==========================================================================
 # luisbarcia.com — Site Configuration
-# Theme: Soberano (local em themes/soberano)
 # ==========================================================================
 
 baseURL = "https://luisbarcia.com/"
 languageCode = "pt-BR"
 title = "Luis Barcia"
-theme = "soberano"
 enableRobotsTXT = true
 enableInlineShortcodes = false
 disableHugoGeneratorInject = true
@@ -184,3 +182,10 @@ disableHugoGeneratorInject = true
   [security.http]
     methods = ['(?i)GET|POST']
     urls = ['none']
+
+# ==========================================================================
+# MODULE — Soberano theme via Hugo Module
+# ==========================================================================
+[module]
+  [[module.imports]]
+    path = "github.com/luisbarcia/soberano"
