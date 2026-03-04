@@ -77,7 +77,7 @@ disableHugoGeneratorInject = true
   # --- Identity ---
   description = "Engenheiro de software. Escrevo sobre automacao, privacidade e infraestrutura que voce controla."
   author = "Luis Barcia"
-  tagline = "// automate the boring. own the critical."
+  tagline = "// build to last. publish to exist."
 
   # --- SEO ---
   og_image = "og-default.png"

@@ -52,6 +52,13 @@ Config nginx em `default.conf`:
   - `partials/hooks/body-start.html` — após `<body>`
   - `partials/hooks/body-end.html` — antes `</body>`
 
+## CI/CD
+
+- Após cada push, verificar o status do CI: `source .envrc && gh run list --limit 1`
+- Se falhar, investigar com `gh run view <id> --log-failed`
+- **Sempre acompanhar o CI após push** — não considerar o trabalho concluído até o CI passar
+- **Deploy é manual e decisão do usuário** — nunca disparar `gh workflow run deploy.yml` sem pedido explícito
+
 ## Git
 
 - **Identity**: `luisbarcia <barcia.me@proton.me>` (GitHub: `luisbarcia`)
