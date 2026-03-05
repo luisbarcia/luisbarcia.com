@@ -7,18 +7,10 @@ pinned: true
 toc: false
 ---
 
-Precisava de um lugar meu. Sem Medium, sem Substack, sem depender de plataforma que pode sumir amanha ou mudar as regras do jogo. Dominio proprio, VPS propria, acessivel via Tor. Sem analytics, sem cookies, sem JavaScript de terceiros.
+Queria um espaco proprio para publicar. Esse site e esse espaco.
 
-## Sobre o que eu escrevo
+A maior parte do que aparece aqui e sobre engenharia de software. Problemas reais do trabalho, documentados com contexto suficiente para serem uteis. Tambem escrevo sobre liberdade individual e soberania digital, dois assuntos que se cruzam com o primeiro mais do que parece.
 
-Trabalho com engenharia de software. Automatizo coisas, integro sistemas, coloco AI pra funcionar em producao. Esse lado vai aparecer aqui.
-
-Mas tambem penso bastante sobre privacidade, criptografia, codigo aberto, descentralizacao. Sobre quem controla a infraestrutura que a gente usa todo dia e por que isso importa. Esse lado tambem vai aparecer.
-
-As vezes os dois se misturam. Um post sobre LLMs pode virar uma discussao sobre soberania. Um post sobre criptografia pode ser sobre politica. Faz parte.
-
-## O combinado
-
-Conteudo regular, bilingue. Sem paywall, sem newsletter. O codigo do site e do [tema](https://github.com/luisbarcia/soberano) e aberto. A [chave PGP](/pgp/) esta publicada. O [warrant canary](/canary/) esta ativo.
+O site roda em Hugo numa VPS propria, acessivel via clearnet e Tor. Codigo do site e do [tema](https://github.com/luisbarcia/soberano) abertos. [Chave PGP](/pgp/) publicada. [Warrant canary](/canary/) ativo. Conteudo bilingue.
 
 Era isso. Primeiro bloco minerado.
