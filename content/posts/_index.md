@@ -1,4 +1,4 @@
 ---
 title: "Posts"
-description: "Artigos sobre automacao, infraestrutura self-hosted, privacidade e soberania digital."
+description: "Engenharia de software, liberdade individual e soberania digital."
 ---
