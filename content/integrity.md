@@ -1,5 +1,5 @@
 ---
-title: "Manifesto de Integridade"
+title: "Integridade"
 layout: integrity
 description: "Checksums SHA-256 para todo o conteudo publicado."
 ---
