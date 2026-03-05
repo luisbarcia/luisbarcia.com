@@ -4,3 +4,5 @@ github.com/luisbarcia/soberano v0.2.1-0.20260305003415-e9ee3c4de552 h1:DaUAtKffP
 github.com/luisbarcia/soberano v0.2.1-0.20260305003415-e9ee3c4de552/go.mod h1:/qDKxzo7Xwr9SXSpSoXMYT4Vv9qcpJwY9iOFp0k/VxU=
 github.com/luisbarcia/soberano v0.3.0 h1:XoIpI48JjNVwrU12N+g4HVBHWzE0Y3Tciu2qkAK34Wo=
 github.com/luisbarcia/soberano v0.3.0/go.mod h1:/qDKxzo7Xwr9SXSpSoXMYT4Vv9qcpJwY9iOFp0k/VxU=
+github.com/luisbarcia/soberano v0.3.1 h1:iO7wmVs4VPwr34H87LaxVkDqerwgStHLKF1toREIEjg=
+github.com/luisbarcia/soberano v0.3.1/go.mod h1:/qDKxzo7Xwr9SXSpSoXMYT4Vv9qcpJwY9iOFp0k/VxU=
