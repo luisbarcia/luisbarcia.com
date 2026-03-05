@@ -75,7 +75,7 @@ disableHugoGeneratorInject = true
   tagline = "// build to last. publish to exist."
 
   # --- SEO ---
-  og_image = "og-default.png"
+  og_image = "og-image.png"
 
   # --- JSON-LD Person schema ---
   job_title = "Software Engineer"
