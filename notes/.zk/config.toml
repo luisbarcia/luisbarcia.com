@@ -35,6 +35,7 @@ multiword-tags = false
 
 # EXTERNAL TOOLS
 [tool]
+editor = "nvim"
 fzf-preview = "bat -p --color always {-1}"
 
 # LSP
