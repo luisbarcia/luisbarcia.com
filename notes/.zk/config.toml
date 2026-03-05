@@ -57,7 +57,7 @@ recents = "--sort created- --created-after 'last two weeks'"
 # COMMAND ALIASES
 [alias]
 ls = "zk list $@"
-f = "zk new fleeting --title '$@'"
-l = "zk new literature --title '$@'"
-p = "zk new permanent --title '$@'"
+f = "zk new fleeting --title \"$@\""
+l = "zk new literature --title \"$@\""
+p = "zk new permanent --title \"$@\""
 recent = "zk edit --sort created- --created-after 'last two weeks' --interactive"
