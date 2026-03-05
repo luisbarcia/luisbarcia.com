@@ -1,5 +1,5 @@
 ---
-date:
+date: {{format-date now}}
 source:
 author:
 tags: []
@@ -15,3 +15,4 @@ tags: []
 
 ## Notas
 
+{{content}}

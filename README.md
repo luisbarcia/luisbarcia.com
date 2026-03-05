@@ -60,6 +60,8 @@ luisbarcia.com/
 │   ├── support.md         # Crypto donations
 │   ├── search.md          # Client-side search (Pagefind)
 │   └── archive.md         # Posts by year
+├── notes/                 # Zettelkasten (zk) — research & writing notes
+├── editorial.md           # Editorial pipeline (backlog → published)
 ├── scripts/               # Build, deploy, canary renewal
 ├── themes/soberano/       # Theme (local copy)
 └── .github/workflows/     # CI + deploy

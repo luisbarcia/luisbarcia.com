@@ -1,0 +1,62 @@
+# zk configuration file
+
+# NOTE SETTINGS
+[note]
+language = "pt"
+filename = "{{format-date now '%Y%m%d%H%M%S'}}-{{slug title}}"
+extension = "md"
+template = "default.md"
+
+# EXTRA VARIABLES
+[extra]
+
+# GROUP OVERRIDES
+[group."fleeting"]
+paths = ["fleeting"]
+[group."fleeting".note]
+template = "fleeting.md"
+
+[group."literature"]
+paths = ["literature"]
+[group."literature".note]
+template = "literature.md"
+
+[group."permanent"]
+paths = ["permanent"]
+[group."permanent".note]
+template = "permanent.md"
+
+# MARKDOWN SETTINGS
+[format.markdown]
+link-format = "wiki"
+hashtags = true
+colon-tags = false
+multiword-tags = false
+
+# EXTERNAL TOOLS
+[tool]
+fzf-preview = "bat -p --color always {-1}"
+
+# LSP
+[lsp]
+
+[lsp.diagnostics]
+dead-link = "error"
+wiki-title = "hint"
+
+[lsp.completion]
+note-label = "{{title-or-path}}"
+note-filter-text = "{{title}} {{path}}"
+note-detail = "{{filename-stem}}"
+
+# NAMED FILTERS
+[filter]
+recents = "--sort created- --created-after 'last two weeks'"
+
+# COMMAND ALIASES
+[alias]
+ls = "zk list $@"
+f = "zk new fleeting --title '$@'"
+l = "zk new literature --title '$@'"
+p = "zk new permanent --title '$@'"
+recent = "zk edit --sort created- --created-after 'last two weeks' --interactive"
