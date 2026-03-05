@@ -59,14 +59,9 @@ disableHugoGeneratorInject = true
   weight = 2
 
 [[menus.footer]]
-  name = "Mirrors"
-  url = "/mirrors/"
-  weight = 3
-
-[[menus.footer]]
   name = "Source"
   url = "https://github.com/luisbarcia/luisbarcia.com"
-  weight = 4
+  weight = 3
   [menus.footer.params]
     external = true
 
