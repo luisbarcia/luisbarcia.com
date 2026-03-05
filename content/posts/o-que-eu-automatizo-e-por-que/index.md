@@ -1,6 +1,6 @@
 ---
 title: "O que eu automatizo e por quê"
-date: 2026-03-12
+date:
 draft: true
 tags: ["automation", "sovereignty"]
 categories: ["profissional"]

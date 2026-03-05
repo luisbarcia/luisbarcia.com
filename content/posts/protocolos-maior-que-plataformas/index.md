@@ -1,6 +1,6 @@
 ---
 title: "Protocolos > plataformas"
-date: 2026-03-23
+date: 2026-03-16
 draft: true
 tags: ["decentralization", "sovereignty"]
 categories: ["pessoal"]

@@ -1,6 +1,6 @@
 ---
 title: "Como penso infraestrutura pessoal"
-date: 2026-03-19
+date: 2026-03-12
 draft: true
 tags: ["self-hosting", "privacy"]
 categories: ["profissional"]

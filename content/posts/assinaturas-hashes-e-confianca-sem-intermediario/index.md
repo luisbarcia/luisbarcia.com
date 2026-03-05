@@ -1,6 +1,6 @@
 ---
 title: "Assinaturas, hashes e confiança sem intermediário"
-date: 2026-04-02
+date: 2026-03-26
 draft: true
 tags: ["cryptography", "opsec"]
 categories: ["profissional"]
