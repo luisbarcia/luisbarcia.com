@@ -1,4 +1,5 @@
 ---
+title: "Roman Zipp — Why Self-host?"
 date: 2026-03-05
 source: https://romanzipp.com/blog/why-a-homelab-why-self-host
 author: Roman Zipp

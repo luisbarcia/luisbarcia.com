@@ -1,4 +1,5 @@
 ---
+title: "{{title}}"
 date: {{format-date now}}
 source:
 author:

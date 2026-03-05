@@ -1,4 +1,5 @@
 ---
+title: "Por que self-hosting não é hobby de nerd"
 date: 2026-03-05
 tags: [sovereignty, self-hosting]
 ---

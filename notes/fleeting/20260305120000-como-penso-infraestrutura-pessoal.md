@@ -1,4 +1,5 @@
 ---
+title: "Como penso infraestrutura pessoal"
 date: 2026-03-05
 tags: [self-hosting, privacy]
 ---

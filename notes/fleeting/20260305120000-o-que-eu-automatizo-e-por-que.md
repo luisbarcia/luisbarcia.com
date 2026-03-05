@@ -1,4 +1,5 @@
 ---
+title: "O que eu automatizo e por quê"
 date: 2026-03-05
 tags: [automation, sovereignty]
 ---

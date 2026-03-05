@@ -1,4 +1,5 @@
 ---
+title: "Por que código aberto é a única opção"
 date: 2026-03-05
 tags: [open-source, decentralization]
 ---

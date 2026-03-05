@@ -1,4 +1,5 @@
 ---
+title: "Assinaturas, hashes e confiança sem intermediário"
 date: 2026-03-05
 tags: [cryptography, opsec]
 ---

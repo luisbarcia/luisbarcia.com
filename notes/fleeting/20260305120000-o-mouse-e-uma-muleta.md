@@ -1,4 +1,5 @@
 ---
+title: "O mouse é uma muleta"
 date: 2026-03-05
 tags: [sovereignty, automation]
 ---

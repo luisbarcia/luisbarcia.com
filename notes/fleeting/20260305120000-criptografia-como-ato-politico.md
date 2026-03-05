@@ -1,4 +1,5 @@
 ---
+title: "Criptografia como ato político"
 date: 2026-03-05
 tags: [cryptography, sovereignty]
 ---

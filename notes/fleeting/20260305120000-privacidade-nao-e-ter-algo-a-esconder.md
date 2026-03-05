@@ -1,4 +1,5 @@
 ---
+title: "Privacidade não é ter algo a esconder"
 date: 2026-03-05
 tags: [privacy, sovereignty]
 ---

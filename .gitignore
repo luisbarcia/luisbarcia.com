@@ -24,3 +24,5 @@ CLAUDE.local.md
 # Soberano theme (cloned repo — ignore non-theme files)
 
 notes/.zk/notebook.db
+
+tmp.*

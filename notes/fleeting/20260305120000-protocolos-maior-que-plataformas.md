@@ -1,4 +1,5 @@
 ---
+title: "Protocolos > plataformas"
 date: 2026-03-05
 tags: [decentralization, sovereignty]
 ---
