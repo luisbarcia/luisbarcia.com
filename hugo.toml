@@ -114,7 +114,7 @@ disableHugoGeneratorInject = true
     # email = "barcia.me@proton.me"
     # nostr = "npub1..."
     mastodon = "https://mastodon.social/@luisbarcia"
-    matrix = "@luisbarcia:matrix.org"
+    matrix = "@luis:luisbarcia.com"
     # linkedin = ""
 
   # --- Crypto / PGP ---
