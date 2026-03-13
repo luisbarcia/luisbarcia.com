@@ -113,7 +113,7 @@ disableHugoGeneratorInject = true
     github = "luisbarcia"
     # email = "barcia.me@proton.me"
     # nostr = "npub1..."
-    mastodon = "https://mastodon.social/@luisbarcia"
+    mastodon = "https://social.luisbarcia.com/@luis"
     matrix = "@luis:luisbarcia.com"
     # linkedin = ""
 
