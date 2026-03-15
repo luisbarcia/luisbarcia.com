@@ -11,7 +11,7 @@ set -euo pipefail
 
 VPS_IP="5.189.155.226"
 VPS_PATH="/opt/stack/site"
-ONION="luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion"
+ONION="luisbarci6v3d7zshng7ct767wfw24wowy25klo4dk2zvozz5r6lugyd.onion"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"

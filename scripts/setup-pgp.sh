@@ -11,7 +11,7 @@
 set -euo pipefail
 
 GPG_KEY="3C3A9612FCDC0242652ECFD3B004471F5EC7A1E7"
-ONION="luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion"
+ONION="luisbarci6v3d7zshng7ct767wfw24wowy25klo4dk2zvozz5r6lugyd.onion"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"

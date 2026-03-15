@@ -3,7 +3,8 @@
 Personal site — blog + portfolio. Built with [Hugo](https://gohugo.io/) and the [Soberano](https://github.com/luisbarcia/soberano) theme.
 
 **Clearnet:** https://luisbarcia.com
-**Tor:** http://luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion
+**Tor:** http://luisbarci6v3d7zshng7ct767wfw24wowy25klo4dk2zvozz5r6lugyd.onion
+**Tor Mirror:** http://luisbarcx3cwibhle5oiau3eploryov7a4rocygzec7rhlt3cwxoprqd.onion
 
 ## Stack
 

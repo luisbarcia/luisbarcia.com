@@ -124,15 +124,19 @@ disableHugoGeneratorInject = true
 
   # --- Sovereignty features ---
   [params.sovereignty]
-    onion_url = "http://luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion"
+    onion_url = "http://luisbarci6v3d7zshng7ct767wfw24wowy25klo4dk2zvozz5r6lugyd.onion"
     [[params.sovereignty.mirrors]]
       url = "https://luisbarcia.com"
       type = "clearnet"
       label = "Clearnet"
     [[params.sovereignty.mirrors]]
-      url = "http://luisbarh3et65nr7kwbft2r24i3dpq5be6goqkfaqutoui2sspqn5sid.onion"
+      url = "http://luisbarci6v3d7zshng7ct767wfw24wowy25klo4dk2zvozz5r6lugyd.onion"
       type = "onion"
       label = "Tor Hidden Service"
+    [[params.sovereignty.mirrors]]
+      url = "http://luisbarcx3cwibhle5oiau3eploryov7a4rocygzec7rhlt3cwxoprqd.onion"
+      type = "onion"
+      label = "Tor Mirror"
 
   # --- Privacy system ---
   # [params.privacy]
