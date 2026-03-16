@@ -26,7 +26,7 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 | **CNPJ** | Query | Busca dados de empresa por CNPJ | BrasilAPI, CNPJ.ws, ReceitaWS |
 | **CNPJ** | Validate | Valida CNPJ por checksum (local, sem API) | — |
 | **CPF** | Validate | Valida CPF pelo algoritmo Modulo 11 (local, sem API) | — |
-| **DDD** | Query | Busca estado e cidades por codigo de area | BrasilAPI |
+| **DDD** | Query | Busca estado e cidades por codigo de area | BrasilAPI, municipios-brasileiros |
 
 ## Diferenciais
 
@@ -35,7 +35,8 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 - **Zero credenciais**: funciona apenas com APIs publicas, sem necessidade de tokens
 - **Validacao offline**: CPF, CNPJ e CEP validados localmente por checksum
 - **Compativel com AI Agents**: funciona como tool em workflows de agentes n8n
-- **105 testes, 100% coverage**: statements, branches, functions e lines
+- **374 testes, 100% coverage**: includes 250 adversarial attack tests (type confusion, null/undefined, unicode injection, XSS/SQLi passthrough)
+- **Zero runtime dependencies**: apenas `n8n-workflow` como peerDependency
 
 ## Roadmap
 
