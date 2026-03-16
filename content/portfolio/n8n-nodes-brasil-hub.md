@@ -1,7 +1,7 @@
 ---
 title: "n8n Nodes Brasil Hub"
 date: 2026-03-11
-description: "Community node para n8n que consulta e valida dados publicos brasileiros (CNPJ, CEP, CPF, Banks, DDD) com fallback multi-provider."
+description: "Community node para n8n que consulta e valida dados publicos brasileiros (CNPJ, CEP, CPF, Banks, DDD, FIPE, Feriados) com fallback multi-provider."
 category: "open-source"
 status: "active"
 stack: ["TypeScript", "n8n", "Node.js"]
@@ -13,7 +13,7 @@ links:
 
 ## Overview
 
-Community node para n8n que unifica consultas e validacoes de dados publicos brasileiros — CNPJ, CEP, CPF, Banks e DDD — com sistema de fallback multi-provider. Cada recurso tem multiplos provedores configurados: se um falha ou atinge rate limit, o proximo assume automaticamente.
+Community node para n8n que unifica consultas e validacoes de dados publicos brasileiros — CNPJ, CEP, CPF, Banks, DDD, FIPE e Feriados — com sistema de fallback multi-provider. Cada recurso tem multiplos provedores configurados: se um falha ou atinge rate limit, o proximo assume automaticamente.
 
 ## Operacoes
 
@@ -27,6 +27,11 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 | **CNPJ** | Validate | Valida CNPJ por checksum (local, sem API) | — |
 | **CPF** | Validate | Valida CPF pelo algoritmo Modulo 11 (local, sem API) | — |
 | **DDD** | Query | Busca estado e cidades por codigo de area | BrasilAPI, municipios-brasileiros |
+| **Feriados** | Query | Lista feriados nacionais por ano (1900-2199) | BrasilAPI, Nager.Date |
+| **FIPE** | Brands | Lista marcas de veiculos por tipo | parallelum |
+| **FIPE** | Models | Lista modelos de uma marca | parallelum |
+| **FIPE** | Years | Lista anos disponiveis de um modelo | parallelum |
+| **FIPE** | Price | Busca preco da tabela FIPE | parallelum |
 
 ## Diferenciais
 
@@ -35,11 +40,10 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 - **Zero credenciais**: funciona apenas com APIs publicas, sem necessidade de tokens
 - **Validacao offline**: CPF, CNPJ e CEP validados localmente por checksum
 - **Compativel com AI Agents**: funciona como tool em workflows de agentes n8n
-- **374 testes, 100% coverage**: includes 250 adversarial attack tests (type confusion, null/undefined, unicode injection, XSS/SQLi passthrough)
+- **688 testes, 99.5%+ coverage**: adversarial attack tests (type confusion, null/undefined, unicode injection, path traversal, SSRF)
 - **Zero runtime dependencies**: apenas `n8n-workflow` como peerDependency
 
 ## Roadmap
 
-- Tabela FIPE, feriados nacionais
 - Retry com exponential backoff
 - Novos provedores e recursos
