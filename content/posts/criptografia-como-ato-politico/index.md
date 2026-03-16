@@ -1,6 +1,6 @@
 ---
 title: "Criptografia como ato político"
-date: 2026-03-23
+date: 2026-04-06
 draft: true
 tags: ["cryptography", "sovereignty"]
 categories: ["pessoal"]

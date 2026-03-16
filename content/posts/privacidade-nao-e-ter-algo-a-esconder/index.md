@@ -1,6 +1,6 @@
 ---
 title: "Privacidade não é ter algo a esconder"
-date: 2026-03-09
+date: 2026-03-23
 draft: true
 tags: ["privacy", "sovereignty"]
 categories: ["pessoal"]

@@ -1,6 +1,6 @@
 ---
 title: "Por que código aberto é a única opção"
-date: 2026-03-19
+date: 2026-04-02
 draft: true
 tags: ["open-source", "decentralization"]
 categories: ["profissional"]
