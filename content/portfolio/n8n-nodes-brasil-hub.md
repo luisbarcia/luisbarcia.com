@@ -21,9 +21,9 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 |---------|----------|-----------|------------|
 | **Bank** | Query | Busca dados de banco por codigo COMPE | BrasilAPI, BancosBrasileiros |
 | **Bank** | List | Lista todos os bancos brasileiros (485+) | BrasilAPI, BancosBrasileiros |
-| **CEP** | Query | Busca endereco por numero de CEP | BrasilAPI, ViaCEP, OpenCEP |
+| **CEP** | Query | Busca endereco por numero de CEP | BrasilAPI, ViaCEP, OpenCEP, ApiCEP |
 | **CEP** | Validate | Valida formato do CEP (local, sem API) | — |
-| **CNPJ** | Query | Busca dados de empresa por CNPJ | BrasilAPI, CNPJ.ws, ReceitaWS |
+| **CNPJ** | Query | Busca dados de empresa por CNPJ | BrasilAPI, CNPJ.ws, ReceitaWS, MinhaReceita, OpenCNPJ.org, OpenCNPJ.com, CNPJA |
 | **CNPJ** | Validate | Valida CNPJ por checksum (local, sem API) | — |
 | **CPF** | Validate | Valida CPF pelo algoritmo Modulo 11 (local, sem API) | — |
 | **DDD** | Query | Busca estado e cidades por codigo de area | BrasilAPI, municipios-brasileiros |
@@ -35,15 +35,16 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 
 ## Diferenciais
 
-- **Multi-provider fallback**: ate 3 provedores por recurso com failover automatico
+- **Multi-provider fallback**: ate 7 provedores por recurso com failover automatico
 - **Output normalizado**: mesma estrutura de resposta independente do provedor usado
 - **Zero credenciais**: funciona apenas com APIs publicas, sem necessidade de tokens
 - **Validacao offline**: CPF, CNPJ e CEP validados localmente por checksum
 - **Compativel com AI Agents**: funciona como tool em workflows de agentes n8n
-- **688 testes, 99.5%+ coverage**: adversarial attack tests (type confusion, null/undefined, unicode injection, path traversal, SSRF)
+- **815 testes, 99.5%+ coverage**: adversarial attack tests (type confusion, null/undefined, unicode injection, path traversal, SSRF)
 - **Zero runtime dependencies**: apenas `n8n-workflow` como peerDependency
 
 ## Roadmap
 
-- Retry com exponential backoff
-- Novos provedores e recursos
+- IBGE, NCM (tax classification codes)
+- Configurable provider order and timeout
+- Rate limiting awareness (429 handling)
