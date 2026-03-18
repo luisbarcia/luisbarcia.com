@@ -17,17 +17,7 @@ Construi o UUBA Recebe como CTO da UUBA Tech. O problema e simples: PMEs brasile
 
 ## Protocolo de cobranca
 
-O bot segue 7 etapas ao longo de 15+ dias, cada uma subindo o tom:
-
-1. D-3: Lembrete preventivo antes do vencimento
-2. D+1: Tom neutro, link direto de pagamento
-3. D+3: Intencoes de implementacao, pergunta "qual dia voce costuma resolver pagamentos?"
-4. D+5: Prova social, "clientes do seu setor estao em dia este mes"
-5. D+7: Aversao a perda, beneficios especiais em risco
-6. D+10: Historico de pagamento em jogo
-7. D+15: Consequencias contratuais
-
-Em qualquer etapa, o bot pede confirmacao por escrito ("confirme com ok") para ativar o vies de consistencia. Se precisar de desconto acima de 10%, escala para humano.
+O bot nao manda mensagem generica. Segue um protocolo de 7 etapas baseado em economia comportamental, comecando com lembrete gentil antes do vencimento e subindo o tom gradualmente ate consequencias contratuais. Cada etapa usa uma tecnica diferente pra aumentar a chance de pagamento sem precisar de atendente humano. Quando o bot nao resolve, escala.
 
 ## Arquitetura
 
@@ -58,4 +48,3 @@ WhatsApp → Evolution API → n8n → Claude Sonnet → UUBA API (FastAPI)
 - 15 containers Docker em producao
 - 5 dominios com SSL automatico
 - Protocolo comportamental de 7 etapas
-- Bot opera 8h-20h dias uteis, 9h-14h sabados
