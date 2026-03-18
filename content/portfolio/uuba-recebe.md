@@ -13,11 +13,11 @@ links:
 
 ## Overview
 
-Construi o UUBA Recebe como CTO da UUBA Tech. O problema e simples: PMEs brasileiras perdem receita porque cobrar eh chato e ninguem faz direito. Planilha, ligacao manual, zero follow-up. Entao fiz um bot de IA que cobra pelo WhatsApp usando tecnicas de economia comportamental, e escala para um atendente humano quando precisa.
+Plataforma de cobranca automatizada para a UUBA Tech. PMEs brasileiras perdem receita por falta de processo de cobranca estruturado — dependem de planilhas, ligacoes manuais e nao fazem follow-up sistematico. O UUBA Recebe resolve isso com um bot de IA que conversa pelo WhatsApp usando tecnicas de economia comportamental e escala para atendente humano quando necessario.
 
 ## Protocolo de cobranca
 
-O bot nao manda mensagem generica. Segue um protocolo de 7 etapas baseado em economia comportamental, comecando com lembrete gentil antes do vencimento e subindo o tom gradualmente ate consequencias contratuais. Cada etapa usa uma tecnica diferente pra aumentar a chance de pagamento sem precisar de atendente humano. Quando o bot nao resolve, escala.
+O bot segue um protocolo de 7 etapas baseado em economia comportamental. Comeca com lembrete antes do vencimento e sobe o tom gradualmente ate consequencias contratuais. Cada etapa aplica uma tecnica diferente para maximizar a recuperacao sem intervenção humana. Quando nao resolve, escala para atendente.
 
 ## Arquitetura
 
