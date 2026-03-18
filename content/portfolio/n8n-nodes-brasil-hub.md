@@ -1,7 +1,7 @@
 ---
 title: "n8n Nodes Brasil Hub"
 date: 2026-03-18
-description: "Community node para n8n que consulta e valida dados publicos brasileiros (CNPJ, CEP, CPF, Banks, DDD, FIPE, Feriados, IBGE, NCM) com fallback multi-provider."
+description: "Community node para n8n que consulta e valida dados publicos brasileiros (CNPJ, CEP, CPF, Banks, DDD, FIPE, Holiday, IBGE, NCM) com fallback multi-provider."
 category: "open-source"
 status: "active"
 stack: ["TypeScript", "n8n", "Node.js"]
@@ -13,7 +13,7 @@ links:
 
 ## Overview
 
-Community node para n8n que unifica consultas e validacoes de dados publicos brasileiros — CNPJ, CEP, CPF, Banks, DDD, FIPE, Feriados, IBGE e NCM — com sistema de fallback multi-provider. Cada recurso tem multiplos provedores configurados: se um falha ou atinge rate limit, o proximo assume automaticamente. Sao 9 recursos, 17 operacoes e 22+ provedores em um unico node.
+Community node para n8n que unifica consultas e validacoes de dados publicos brasileiros — CNPJ, CEP, CPF, Banks, DDD, FIPE, Holiday, IBGE e NCM — com sistema de fallback multi-provider. Cada recurso tem multiplos provedores configurados: se um falha ou atinge rate limit, o proximo assume automaticamente. Sao 9 recursos, 17 operacoes e 22 provedores em um unico node.
 
 ## Operacoes
 
@@ -27,7 +27,7 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 | **CNPJ** | Validate | Valida CNPJ por checksum (local, sem API) | — |
 | **CPF** | Validate | Valida CPF pelo algoritmo Modulo 11 (local, sem API) | — |
 | **DDD** | Query | Busca estado e cidades por codigo de area | BrasilAPI, municipios-brasileiros |
-| **Feriados** | Query | Lista feriados nacionais por ano (1900-2199) | BrasilAPI, Nager.Date |
+| **Holiday** | Query | Lista feriados nacionais por ano (1900-2199) | BrasilAPI, Nager.Date |
 | **FIPE** | Brands | Lista marcas de veiculos por tipo | parallelum |
 | **FIPE** | Models | Lista modelos de uma marca | parallelum |
 | **FIPE** | Years | Lista anos disponiveis de um modelo | parallelum |
