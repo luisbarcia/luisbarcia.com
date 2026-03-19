@@ -1,22 +1,22 @@
 ---
 title: "Sobre"
-description: "Luis Barcia — engenheiro de software full stack, automacao de processos, integracoes de APIs e produtos B2B."
+description: "Luis Barcia — CTO da UUBA Tech. Engenheiro de software, automacao de processos financeiros, AI em producao e infraestrutura self-hosted."
 ---
 
 ## Quem sou
 
-Luis Barcia. Engenheiro de software full stack com foco em back-end.
+Luis Barcia. CTO da [UUBA Tech](https://uuba.tech).
 
-Trabalho na [Uuba](https://uuba.com.br) construindo produtos B2B para operacoes de BPO. Automatizo processos financeiros, integro sistemas via API e uso AI em producao para resolver o que antes dependia de trabalho manual.
+Construo produtos B2B para operacoes financeiras de PMEs. Na pratica, isso significa projetar a arquitetura, escrever o backend, configurar a infra, treinar o modelo de IA e colocar tudo em producao. Do endpoint ao deploy.
 
 ## O que eu construo
 
-- **Produtos B2B** — aplicacoes end-to-end para operacoes financeiras e BPO
-- **Engenharia de integracao** — pipelines entre ERPs, gateways de pagamento e sistemas legados
-- **AI engineering** — agentes e workflows com LLMs em producao
-- **Back-end** — APIs, servicos e infraestrutura em escala
+Na UUBA Tech, sou responsavel por toda a stack tecnica. Alguns exemplos do que esta rodando em producao:
 
-**Stack:** Python, Node.js, JavaScript, n8n, Linux.
+- **UUBA Recebe** — plataforma de cobranca automatizada com bot de IA no WhatsApp, protocolo comportamental de 7 etapas e escalacao para atendente humano. 14 endpoints, 174 testes, 15 containers. [Ver no portfolio](/portfolio/uuba-recebe/)
+- **n8n Nodes Brasil Hub** — community node open-source para n8n com 9 recursos, 22 provedores e fallback automatico para consulta de dados publicos brasileiros. [Ver no portfolio](/portfolio/n8n-nodes-brasil-hub/)
+
+**Stack:** Python, FastAPI, PostgreSQL, Node.js, TypeScript, n8n, Docker, Claude AI, Linux.
 
 ## Filosofia
 
@@ -25,8 +25,8 @@ Publico no meu proprio dominio, hospedo na minha propria infraestrutura. Sem ana
 ## Contato
 
 - **GitHub:** [luisbarcia](https://github.com/luisbarcia)
-- **Mastodon:** [@luisbarcia@mastodon.social](https://mastodon.social/@luisbarcia)
-- **Matrix:** [@luisbarcia:matrix.org](https://matrix.to/#/@luisbarcia:matrix.org)
+- **Fediverse:** [@luis@social.luisbarcia.com](https://social.luisbarcia.com/@luis)
+- **Matrix:** [@luis:luisbarcia.com](https://matrix.to/#/@luis:luisbarcia.com)
 - **PGP:** [chave publica](/pgp/)
 
 Nao uso redes centralizadas. Se precisar falar comigo, os canais acima sao os certos.
