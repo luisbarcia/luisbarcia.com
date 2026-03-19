@@ -1,6 +1,6 @@
 ---
 title: "n8n Nodes Brasil Hub"
-date: 2026-03-18
+date: 2026-03-19
 description: "Community node para n8n que consulta e valida dados publicos brasileiros (CNPJ, CEP, CPF, Banks, DDD, FIPE, Holiday, IBGE, NCM) com fallback multi-provider."
 category: "open-source"
 status: "active"
@@ -51,6 +51,7 @@ Community node para n8n que unifica consultas e validacoes de dados publicos bra
 - **Configurable timeout**: 1s-60s por request, default 10s
 - **CNPJ AI Summary**: output mode com 8 campos flat em ingles, otimizado para AI Agents
 - **npm provenance + build attestation**: supply chain verificavel
+- **Error type safety**: guards `instanceof` em vez de casts inseguros, `Number.isFinite()` contra NaN/Infinity
 
 ## Roadmap
 
