@@ -141,8 +141,10 @@ ignoreLogs = ['warning-goldmark-raw-html']
       label = "Tor Mirror"
 
   # --- Privacy system ---
-  # [params.privacy]
-  #   preset = "standard"
+  [params.privacy]
+    preset = "hardened"
+    show_same_as = true
+    show_pgp_in_schema = true
 
 # ==========================================================================
 # MARKUP
