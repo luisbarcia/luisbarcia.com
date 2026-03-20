@@ -4,10 +4,12 @@
 
 baseURL = "https://luisbarcia.com/"
 languageCode = "pt-BR"
+defaultContentLanguage = "pt-br"
 title = "Luis Barcia"
 enableRobotsTXT = true
 enableInlineShortcodes = false
 disableHugoGeneratorInject = true
+ignoreLogs = ['warning-goldmark-raw-html']
 
 # Pagination (Hugo v0.128+)
 [pagination]
