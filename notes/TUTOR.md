@@ -2,97 +2,266 @@
 ===============
 
 Tutorial interativo do Zettelkasten com zk + Neovim.
-Começa do zero. Ao final, você terá:
-  - Um notebook Zettelkasten configurado
-  - zk + Neovim integrados via LSP
-  - Um rascunho de post pronto em content/posts/
+Baseado no método original de Niklas Luhmann — não em interpretações
+populares.
 
-O tema do post que vamos construir:
+Ao final, você terá:
+  - Um notebook Zettelkasten fiel ao método original
+  - zk + Neovim integrados via LSP
+  - Um rascunho de texto pronto, montado a partir das notas
+
+O tema do texto que vamos construir:
   "Verificar antes de confiar"
-  — checksums, assinaturas digitais, e por que "confia em mim" não é argumento.
+  — checksums, assinaturas digitais, e por que "confia em mim" não é
+  argumento.
 
 Cada lição constrói uma peça. Nenhum exercício é descartável.
 Tudo que você criar aqui vira material real.
 
+COMO USAR ESTE TUTORIAL:
+  Abra este arquivo no Neovim:  nvim TUTOR.md
+  Faça tudo de dentro do Neovim — nunca saia.
+
+  Comandos de terminal usam  :!  (ex:  :!zk list )
+  Abrir arquivos usa  :e  (ex:  :e .zk/config.toml )
+  Voltar aqui usa  Space f b  → TUTOR.md  (ou  :b TUTOR )
+
 
 
 ==========================================================================
-  PARTE 1: SETUP
+  PARTE 1: O QUE É ZETTELKASTEN DE VERDADE
+==========================================================================
+
+Antes de configurar qualquer ferramenta, você precisa entender o que
+está construindo — e o que NÃO está.
+
+
+==========================================================================
+  Lição 1.1: A HISTÓRIA
+==========================================================================
+
+Niklas Luhmann (1927–1998) foi um sociólogo alemão que publicou mais
+de 70 livros e 400 artigos. Sua produtividade vinha de um sistema de
+notas em fichas de papel que ele chamava de Zettelkasten ("caixa de
+fichas").
+
+Luhmann descrevia o sistema como seu "parceiro de comunicação" — uma
+máquina que, pela forma como era organizada, gerava conexões
+inesperadas e sugeria ideias que ele não teria sozinho. Ele chamava
+o resultado de "combinação de desordem e ordem, de clustering e
+combinações imprevisíveis".
+
+O sistema NÃO era:
+  - Uma taxonomia de tipos de nota (fleeting / literature / permanent)
+  - Um pipeline linear (captura → pesquisa → síntese)
+  - Um sistema de tags
+
+Esses conceitos foram popularizados por Sönke Ahrens em "How to Take
+Smart Notes" (2017). O livro é útil como introdução, mas sistematizou
+e simplificou o método de formas que distorcem o original. A Parte 7
+deste tutorial compara os dois para que você faça escolhas informadas.
+
+
+
+==========================================================================
+  Lição 1.2: AS DUAS CAIXAS
+==========================================================================
+
+Luhmann mantinha DUAS caixas separadas:
+
+  1. Zettelkasten principal — ideias, argumentos, pensamentos, todos
+     escritos nas próprias palavras. Esta é "a caixa".
+
+  2. Caixa de referências bibliográficas — fichas curtas com dados
+     da fonte (autor, título, ano) e ponteiros para os zettels
+     relevantes.
+
+A caixa principal NÃO continha citações nem resumos. Tudo era
+reformulado nas palavras de Luhmann. A caixa de referências era
+apenas um índice de fontes — mínimo e funcional.
+
+Neste tutorial, vamos usar:
+
+  notes/
+  ├── zettel/     a caixa principal (ideias)
+  └── biblio/     referências bibliográficas
+
+
+
+==========================================================================
+  Lição 1.3: FOLGEZETTEL — O CORAÇÃO DO MÉTODO
+==========================================================================
+
+Folgezettel ("nota de continuação") é o mecanismo central que
+diferencia o Zettelkasten de qualquer outro sistema de notas.
+
+Funciona assim: cada ficha recebe um número fixo. Quando uma nova
+ideia CONTINUA ou RAMIFICA de uma existente, ela recebe um número
+derivado:
+
+  1       Checksums provam integridade
+  1a      SHA-256 substituiu MD5 como padrão
+  1b      Checksum não prova autoria — só que não mudou
+  1b1     Para provar autoria, precisa de assinatura
+
+  2       Assinaturas digitais provam autenticidade
+  2a      Criptografia assimétrica: privada assina, pública verifica
+
+  3       "Don't trust, verify" — o princípio
+
+O ato de DECIDIR onde posicionar uma nota é cognitivo. Você é forçado
+a revisitar notas anteriores, entender a relação, e escolher se a
+nova ideia:
+
+  - Continua a nota atual    (1 → 1a)
+  - Contrasta com ela        (1a, 1b)
+  - Abre um novo tópico      (1, 2, 3)
+
+Isso NÃO é a mesma coisa que "linkar notas". Links digitais ([[wiki]])
+são úteis, mas não forçam a decisão de posicionamento. No Zettelkasten
+digital, simulamos Folgezettel com links explícitos de continuidade.
+
+
+
+==========================================================================
+  Lição 1.4: O REGISTER (ÍNDICE)
+==========================================================================
+
+Luhmann mantinha um Register (Schlagwortregister) — um índice de
+palavras-chave com ponteiros para notas.
+
+IMPORTANTE: o Register NÃO é um sistema de tags.
+
+  Tags:     cada nota recebe múltiplas tags → busca por categoria
+  Register: cada palavra-chave aponta para 1–3 notas → ponto de entrada
+
+O Register é uma porta de entrada. Você busca "verificação", encontra
+1–2 notas iniciais, e a partir delas navega pelas ramificações
+(Folgezettel). O Register é mínimo por design — poucos ponteiros
+por termo, às vezes apenas um.
+
+Neste tutorial, o Register será um arquivo _register.md na raiz
+de notes/.
+
+
+
+==========================================================================
+  Lição 1.5: HUB NOTES
+==========================================================================
+
+Hub notes são zettels que listam as ramificações de um tópico.
+Funcionam como mapas locais: "para continuar este assunto, veja
+estas notas".
+
+Diferença entre Hub note e Register:
+
+  Register  → índice GLOBAL, pontos de entrada por palavra-chave
+  Hub note  → mapa LOCAL de um tópico específico
+
+Um hub note pode ser referenciado pelo Register. É a ponte entre
+o índice geral e uma cadeia de pensamento específica.
+
+Com esse contexto, vamos configurar as ferramentas.
+
+
+
+==========================================================================
+  PARTE 2: SETUP
 ==========================================================================
 
 
 ==========================================================================
-  Lição 1.1: INSTALAR O ZK
+  Lição 2.1: INSTALAR O ZK
 ==========================================================================
 
-zk é um CLI para gerenciar notas em plain text (Zettelkasten).
+zk é um CLI para gerenciar notas em plain text.
 Indexa arquivos .md, resolve [[links]], e expõe um LSP server.
 
-  EXERCÍCIO (no terminal):
-  1. Instale:
-     brew install zk
+  EXERCÍCIO:
+  1. Instale (se ainda não tem):
+     :!brew install zk
 
   2. Verifique:
-     zk --version
+     :!zk --version
 
 Se já está instalado, siga em frente.
 
 
 
 ==========================================================================
-  Lição 1.2: CRIAR O DIRETÓRIO DE NOTAS
+  Lição 2.2: CRIAR O DIRETÓRIO DE NOTAS
 ==========================================================================
 
-O notebook fica em notes/ na raiz do projeto.
-Três subdiretórios, um por tipo de nota:
+Duas pastas — uma por caixa. Mais o arquivo de Register.
 
   notes/
-  ├── fleeting/       ideias rápidas, capturas brutas
-  ├── literature/     anotações de fontes (artigos, livros, vídeos)
-  └── permanent/      ideias próprias, argumentos, teses
+  ├── zettel/        a caixa principal (ideias, argumentos)
+  ├── biblio/        referências bibliográficas
+  └── _register.md   índice de pontos de entrada
 
-  EXERCÍCIO (no terminal, na raiz do projeto):
+  EXERCÍCIO:
   1. Crie a estrutura:
-     mkdir -p notes/fleeting notes/literature notes/permanent
+     :!mkdir -p notes/zettel notes/biblio
 
   2. Adicione .gitkeep para o git trackear pastas vazias:
-     touch notes/fleeting/.gitkeep
-     touch notes/literature/.gitkeep
-     touch notes/permanent/.gitkeep
+     :!touch notes/zettel/.gitkeep notes/biblio/.gitkeep
+
+  3. Crie o Register vazio:
+     :e notes/_register.md
+
+     Cole o conteúdo abaixo, salve com  :w  e volte aqui ( Space f b ):
+
+     ---
+     title: "Register"
+     ---
+
+     Índice de pontos de entrada para o Zettelkasten.
+     Cada palavra-chave aponta para 1–3 notas iniciais.
+
+     ## Palavras-chave
+
+     (será preenchido ao longo do tutorial)
 
 
 
 ==========================================================================
-  Lição 1.3: INICIALIZAR O NOTEBOOK
+  Lição 2.3: INICIALIZAR O NOTEBOOK
 ==========================================================================
 
 O zk precisa de um diretório .zk/ com configuração e templates.
 
-  EXERCÍCIO (no terminal):
-  1. Entre na pasta:
-     cd notes
+  EXERCÍCIO:
+  1. Inicialize o notebook:
+     :!cd notes && zk init --no-input
 
-  2. Inicialize:
-     zk init
+     (--no-input pula as perguntas interativas. Não importa —
+     vamos substituir o config.toml inteiro na próxima lição.)
 
-  3. Veja o que foi criado:
-     ls -la .zk/
-     ls .zk/templates/
+  2. Veja o que foi criado:
+     :!ls -la notes/.zk/
+     :!ls notes/.zk/templates/
+
+  3. Mude o diretório de trabalho do Neovim para notes/:
+     :cd notes
+
+     A partir de agora, todos os comandos :! rodam dentro de notes/.
+     Os comandos zk vão encontrar o .zk/ automaticamente.
 
   4. Adicione ao .gitignore do projeto:
-     echo "notes/.zk/notebook.db" >> ../.gitignore
+     :!echo "notes/.zk/notebook.db" >> ../.gitignore
 
 
 
 ==========================================================================
-  Lição 1.4: CONFIGURAR O ZK
+  Lição 2.4: CONFIGURAR O ZK
 ==========================================================================
 
 Abra .zk/config.toml e substitua todo o conteúdo por:
 
   EXERCÍCIO:
-  1. nvim .zk/config.toml
-  2. Cole a configuração abaixo:
+  1. Abra o config:
+     :e .zk/config.toml
+  2. Apague tudo ( ggdG ) e cole a configuração abaixo:
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -100,24 +269,19 @@ Abra .zk/config.toml e substitua todo o conteúdo por:
 language = "pt"
 filename = "{{format-date now '%Y%m%d%H%M%S'}}-{{slug title}}"
 extension = "md"
-template = "default.md"
+template = "zettel.md"
 
 [extra]
 
-[group."fleeting"]
-paths = ["fleeting"]
-[group."fleeting".note]
-template = "fleeting.md"
+[group."zettel"]
+paths = ["zettel"]
+[group."zettel".note]
+template = "zettel.md"
 
-[group."literature"]
-paths = ["literature"]
-[group."literature".note]
-template = "literature.md"
-
-[group."permanent"]
-paths = ["permanent"]
-[group."permanent".note]
-template = "permanent.md"
+[group."biblio"]
+paths = ["biblio"]
+[group."biblio".note]
+template = "biblio.md"
 
 [format.markdown]
 link-format = "wiki"
@@ -141,39 +305,47 @@ note-detail = "{{filename-stem}}"
 
 [filter]
 recents = "--sort created- --created-after 'last two weeks'"
+orphans = "--orphan"
+tagless = "--tagless"
 
 [alias]
 ls = "zk list $argv"
-f = "zk new fleeting --title \"$argv\""
-l = "zk new literature --title \"$argv\""
-p = "zk new permanent --title \"$argv\""
+z = "zk new zettel --title \"$argv\""
+b = "zk new biblio --title \"$argv\""
 recent = "zk edit --sort created- --created-after 'last two weeks' --interactive"
+orphans = "zk list --orphan --format oneline"
+tagless = "zk list --tagless --format oneline"
+broken = "zk list --missing-backlink --format oneline"
+tags = "zk tag list --format full"
+graph = "zk graph --format json --quiet"
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  3. Salve e saia:  :wq
+  3. Salve:  :w
+  4. Volte ao TUTOR:  Space f b  → TUTOR.md
 
 O que cada seção faz:
   [note]      filename com timestamp + slug, idioma pt
-  [group.*]   cada diretório usa seu template
+  [group.*]   zettel e biblio usam templates diferentes
   [format]    links [[wiki]], hashtags ativadas
   [tool]      editor nvim, preview com bat
   [lsp]       dead links = erro, autocomplete configurado
-  [alias]     atalhos: zk f, zk l, zk p
+  [alias]     atalhos: zk z, zk b, zk orphans, zk tags, zk graph
 
 
 
 ==========================================================================
-  Lição 1.5: CRIAR OS TEMPLATES
+  Lição 2.5: CRIAR OS TEMPLATES
 ==========================================================================
 
-Templates definem o conteúdo inicial de cada tipo de nota.
+Templates definem o conteúdo inicial de cada nota.
 Ficam em .zk/templates/ e usam sintaxe Handlebars.
 
   EXERCÍCIO:
-  Crie cada arquivo com o conteúdo indicado.
+  Crie cada arquivo, cole o conteúdo, salve e volte aqui.
 
-  1. .zk/templates/default.md
+  1. :e .zk/templates/zettel.md
+     Apague o conteúdo existente ( ggdG ) e cole:
 
      ---
      title: "{{title}}"
@@ -183,89 +355,81 @@ Ficam em .zk/templates/ e usam sintaxe Handlebars.
 
      {{content}}
 
-  2. .zk/templates/fleeting.md — mesmo conteúdo do default.
+     Salve:  :w  → Volte:  Space f b  → TUTOR.md
 
-  3. .zk/templates/literature.md
+  2. :e .zk/templates/biblio.md
+     Cole:
 
      ---
      title: "{{title}}"
      date: {{format-date now}}
      source:
      author:
-     tags: []
-     ---
-
-     ## Pontos-chave
-
-     -
-
-     ## Citações
-
-     >
-
-     ## Notas
-
-     {{content}}
-
-  4. .zk/templates/permanent.md
-
-     ---
-     title: "{{title}}"
-     date: {{format-date now}}
-     tags: []
-     links: []
      ---
 
      {{content}}
 
-O campo title: é obrigatório — sem ele o zk não indexa títulos.
+     Salve:  :w  → Volte:  Space f b  → TUTOR.md
+
+O template do zettel é mínimo por design. A complexidade está nas
+conexões entre notas, não no formato individual.
+
+O template de biblio tem source e author — é a ficha bibliográfica.
 
 
 
 ==========================================================================
-  Lição 1.6: TESTAR A INSTALAÇÃO
+  Lição 2.6: TESTAR A INSTALAÇÃO
 ==========================================================================
 
-  EXERCÍCIO (no terminal, dentro de notes/):
+  EXERCÍCIO:
   1. Crie uma nota de teste:
-     zk new fleeting --title "teste de instalação"
+     :!zk new zettel --title "teste de instalação" --print-path
 
-  2. O nvim abre. Verifique:
+     (--print-path imprime o caminho em vez de abrir o editor,
+     já que estamos dentro do Neovim)
+
+  2. Abra a nota criada:
+     :e zettel/
+     → Tab para completar o nome do arquivo → Enter
+
+  3. Verifique:
      - Filename: YYYYMMDDHHMMSS-teste-de-instalacao.md
      - Frontmatter com title, date, tags preenchidos
-     - Arquivo em fleeting/
 
-  3. Salve e feche:  :wq
+  4. Volte ao TUTOR:  Space f b  → TUTOR.md
 
-  4. Verifique o índice:
-     zk list --format "{{title}} — {{path}}"
+  5. Verifique o índice:
+     :!zk list --format "{{title}} — {{path}}"
 
-  5. Delete a nota de teste:
-     rm fleeting/*teste-de-instalacao*
+  6. Delete a nota de teste:
+     :!rm zettel/*teste-de-instalacao*
 
-Setup concluído. Siga para a Parte 2.
+Setup concluído. Siga para a Parte 3.
 
-
-
-==========================================================================
-  PARTE 2: NEOVIM
-==========================================================================
 
 
 ==========================================================================
-  Lição 2.1: PLUGIN ZK-NVIM
+  PARTE 3: NEOVIM
+==========================================================================
+
+
+==========================================================================
+  Lição 3.1: PLUGIN ZK-NVIM
 ==========================================================================
 
 O zk-nvim conecta o Neovim ao LSP do zk. Quando você abre um .md
-dentro de notes/, o LSP ativa automaticamente: autocomplete de [[links]],
-go-to-definition, backlinks, hover, diagnósticos.
+dentro de notes/, o LSP ativa automaticamente: autocomplete de
+[[links]], go-to-definition, backlinks, hover, diagnósticos.
 
 Pré-requisito: lazy.nvim instalado.
 NÃO instale o zk via Mason — o CLI já inclui o LSP.
 
   EXERCÍCIO:
-  1. Adicione ao init.lua (~/.config/nvim/init.lua), dentro do
-     require("lazy").setup({ ... }):
+  1. Abra seu init.lua:
+     :e ~/.config/nvim/init.lua
+
+  2. Adicione dentro do require("lazy").setup({ ... }):
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -304,19 +468,14 @@ NÃO instale o zk via Mason — o CLI já inclui o LSP.
     keymap("n", "<leader>zx", "<cmd>ZkIndex<cr>")
 
     -- Criar
-    keymap("n", "<leader>zf", function()
-      vim.ui.input({ prompt = "Fleeting: " }, function(t)
-        if t then zk.new({ dir = "fleeting", title = t }) end
+    keymap("n", "<leader>zz", function()
+      vim.ui.input({ prompt = "Zettel: " }, function(t)
+        if t then zk.new({ dir = "zettel", title = t }) end
       end)
     end)
     keymap("n", "<leader>zr", function()
-      vim.ui.input({ prompt = "Literature: " }, function(t)
-        if t then zk.new({ dir = "literature", title = t }) end
-      end)
-    end)
-    keymap("n", "<leader>zp", function()
-      vim.ui.input({ prompt = "Permanent: " }, function(t)
-        if t then zk.new({ dir = "permanent", title = t }) end
+      vim.ui.input({ prompt = "Referência: " }, function(t)
+        if t then zk.new({ dir = "biblio", title = t }) end
       end)
     end)
 
@@ -329,7 +488,7 @@ NÃO instale o zk via Mason — o CLI já inclui o LSP.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  2. Adicione FORA dos plugins (para gd e K funcionarem):
+  3. Adicione FORA dos plugins (para gd e K funcionarem):
 
      vim.api.nvim_create_autocmd("LspAttach", {
        callback = function(args)
@@ -340,445 +499,587 @@ NÃO instale o zk via Mason — o CLI já inclui o LSP.
        end,
      })
 
-  3. Abra o Neovim e sincronize:  :Lazy sync
-  4. Feche e reabra.
+  4. Salve:  :w
+  5. Sincronize os plugins:  :Lazy sync
+  6. Recarregue o Neovim. Escolha uma das opções:
+     - :source $MYVIMRC  (pode funcionar, depende da config)
+     - :qa  e reabra:  nvim TUTOR.md
+  7. Volte ao TUTOR:  Space f b  → TUTOR.md
 
 
 
 ==========================================================================
-  Lição 2.2: VERIFICAR O LSP
+  Lição 3.2: VERIFICAR O LSP
 ==========================================================================
 
   EXERCÍCIO:
-  1. Abra este arquivo de dentro de notes/:
-     cd notes && nvim TUTOR.md
+  1. Se ainda não fez, mude o diretório de trabalho:
+     :cd notes
 
-  2. Digite  :LspInfo  e pressione Enter
-  3. "zk" deve aparecer na lista de clientes
-  4. Pressione  q  para fechar
+  2. Abra o Register:
+     :e _register.md
 
-Se não aparecer, você não está dentro de notes/.
+  3. Digite  :LspInfo  e pressione Enter
+  4. "zk" deve aparecer na lista de clientes
+  5. Pressione  q  para fechar
+
+  Se não aparecer, verifique:  :pwd  deve mostrar .../notes/
+
+  6. Volte ao TUTOR:  Space f b  → TUTOR.md
 
 
 
 ==========================================================================
-  PARTE 3: CAPTURA — A IDEIA INICIAL
+  PARTE 4: O MÉTODO — CONSTRUIR UM ARGUMENTO
 ==========================================================================
 
-A partir daqui, vamos construir um post real.
+A partir daqui, vamos construir notas reais usando o método de
+Luhmann.
+
 Tema: "Verificar antes de confiar"
 
-Cada exercício cria uma peça. No final, tudo vira um rascunho
-de post em content/posts/.
+Diferente de um pipeline linear (captura → pesquisa → síntese), o
+Zettelkasten funciona por ramificação: cada nota pode gerar ramos
+que você não planejou. O sistema "fala de volta".
+
 
 
 ==========================================================================
-  Lição 3.1: PRIMEIRA FLEETING NOTE
+  Lição 4.1: O PRIMEIRO ZETTEL
 ==========================================================================
 
-Toda escrita começa com uma ideia bruta. Sem filtro, sem estrutura.
-Só a faísca.
+Toda cadeia de pensamento começa com uma nota. Não "fleeting", não
+"permanent" — apenas um zettel: uma ideia atômica, nas suas palavras.
+
+Atômica = uma ideia por nota. Não um parágrafo, não um ensaio.
+Uma ideia que se sustenta sem contexto externo.
 
   EXERCÍCIO:
-  1. Pressione  Space z f
-  2. Título: "Verificar antes de confiar"
-  3. O Neovim abre a nota. Pressione  i  (insert mode)
-  4. Escreva o texto abaixo (ou algo nas suas palavras):
+  1. Pressione  Space z z
+  2. Título: "Checksums provam integridade"
+  3. O Neovim abre a nota. Pressione  i
+  4. Escreva:
 
-     Todo software que você baixa pode ter sido adulterado.
-     Todo binário pode conter código que você não autorizou.
-     A diferença entre confiar e verificar é a diferença entre
-     fé e matemática. Checksums, assinaturas PGP, hashes —
-     são ferramentas de quem não aceita "confia em mim" como
-     argumento técnico.
+     Um checksum é um hash do conteúdo de um arquivo. Se um único
+     bit muda, o hash muda. Verificar o checksum de um download
+     confirma que o arquivo não foi alterado entre o servidor e
+     a sua máquina.
 
-  5. Pressione  Esc  para voltar ao modo normal
+  5. Adicione uma tag no frontmatter:
+     tags: [verificação]
+
   6. Salve:  :w
 
-Parabéns. Sua primeira captura. Bruta, incompleta, imperfeita.
-Exatamente como deve ser.
+Essa é a nota 1 da sua cadeia. Curta, clara, uma ideia.
 
 
 
 ==========================================================================
-  Lição 3.2: NAVEGAR NOTAS
+  Lição 4.2: FOLGEZETTEL — CONTINUAR O PENSAMENTO
 ==========================================================================
 
-Agora que existe uma nota no notebook, vamos aprender a encontrá-la.
+Agora vamos ramificar. A próxima nota CONTINUA o pensamento da
+primeira — é uma Folgezettel.
+
+No sistema físico de Luhmann, a posição da ficha comunicava a
+relação. No digital, fazemos isso com um link explícito no início
+da nota.
 
   EXERCÍCIO:
-  1. Volte a este arquivo:  Space f b  → TUTOR.md
+  1. Volte aqui:  Space f b  → TUTOR.md
 
-  2. Liste todas as notas:
-     Pressione  Space z n
-     Sua fleeting note deve aparecer na lista.
-     Pressione  Esc  para fechar.
+  2. Pressione  Space z z
+  3. Título: "SHA-256 substituiu MD5"
+  4. Escreva (pressione  i ):
 
-  3. Busque por conteúdo:
-     Pressione  Space z s
-     Digite "checksum" → Enter
-     A nota deve aparecer.
-     Pressione  Esc  → volte aqui com  Space f b
+     Continua de
 
-  4. Busque por tag:
-     Pressione  Space z t
-     Nenhuma tag ainda — a nota está com tags: [].
-     Pressione  Esc
+  5. Agora insira o link: pressione  Esc , depois  Space z i
+     → no Telescope, selecione "Checksums provam integridade"
+     → o link [[...]] é inserido automaticamente
 
+  6. Pressione  o  (nova linha) e continue:
 
+     MD5 é vulnerável a colisões — dois arquivos diferentes podem
+     gerar o mesmo hash. SHA-256 é o padrão atual: resistente a
+     colisões e computacionalmente viável de verificar.
 
-==========================================================================
-  PARTE 4: PESQUISA — ESTUDAR AS FONTES
-==========================================================================
+  7. tags: [verificação]
+  8. Salve:  :w
 
-A fleeting note é o ponto de partida. Agora vamos pesquisar fontes
-e anotar o que aprendemos. Cada fonte vira uma literature note.
+A primeira linha ("Continua de [[...]]") é a Folgezettel digital.
+Ela estabelece a posição desta nota na cadeia de pensamento.
+
 
 
 ==========================================================================
-  Lição 4.1: PRIMEIRA LITERATURE NOTE
+  Lição 4.3: RAMIFICAR EM OUTRA DIREÇÃO
 ==========================================================================
 
-Fonte 1: como verificar checksums SHA-256.
+A nota 1 ("Checksums provam integridade") pode ter outra ramificação
+— uma que CONTRASTA em vez de continuar.
 
   EXERCÍCIO:
-  1. Pressione  Space z r
-  2. Título: "How to verify checksums"
-  3. O Neovim abre a nota com o template literature.
-  4. Preencha o frontmatter (pressione  i  para editar):
+  1. Volte aqui:  Space f b  → TUTOR.md
+
+  2. Pressione  Space z z
+  3. Título: "Checksum não prova autoria"
+  4. Escreva:
+
+     Ramifica de
+
+  5. Insira o link:  Space z i  → "Checksums provam integridade"
+
+  6. Continue (pressione  o ):
+
+     Um checksum garante que o arquivo não mudou, mas NÃO garante
+     QUEM o criou. Se o servidor for comprometido, o atacante pode
+     substituir tanto o arquivo quanto o checksum. Para provar
+     autoria, é necessário um mecanismo diferente: assinaturas
+     digitais.
+
+  7. tags: [verificação]
+  8. Salve:  :w
+
+Agora você tem uma ramificação real:
+
+  "Checksums provam integridade"
+   ├── "SHA-256 substituiu MD5"          (continua)
+   └── "Checksum não prova autoria"      (contrasta)
+
+
+
+==========================================================================
+  Lição 4.4: CONTINUAR UMA RAMIFICAÇÃO
+==========================================================================
+
+A nota "Checksum não prova autoria" abre uma questão: então o que
+prova autoria? Vamos continuar ESSE ramo.
+
+  EXERCÍCIO:
+  1. Volte aqui:  Space f b  → TUTOR.md
+
+  2. Pressione  Space z z
+  3. Título: "Assinaturas digitais provam autenticidade"
+  4. Escreva:
+
+     Continua de
+
+  5. Insira o link:  Space z i  → "Checksum não prova autoria"
+
+  6. Continue:
+
+     Uma assinatura digital usa criptografia assimétrica: a chave
+     privada assina, a chave pública verifica. Isso prova duas
+     coisas: o arquivo não foi alterado (integridade) E quem
+     assinou é quem diz ser (autenticidade).
+
+  7. tags: [verificação, criptografia]
+  8. Salve:  :w
+
+O grafo até aqui:
+
+  "Checksums provam integridade"
+   ├── "SHA-256 substituiu MD5"
+   └── "Checksum não prova autoria"
+        └── "Assinaturas digitais provam autenticidade"
+
+
+
+==========================================================================
+  Lição 4.5: UMA NOVA CADEIA
+==========================================================================
+
+Nem toda nota ramifica de outra. Às vezes surge uma ideia que abre
+um tópico separado — sem Folgezettel, apenas uma nova raiz.
+
+  EXERCÍCIO:
+  1. Volte aqui:  Space f b  → TUTOR.md
+
+  2. Pressione  Space z z
+  3. Título: "Verificar elimina a necessidade de confiar"
+  4. Escreva:
+
+     "Don't trust, verify" é um princípio da cultura cypherpunk
+     que se aplica além de criptografia: software, comunicação,
+     identidade. Se você pode verificar por conta própria, não
+     precisa confiar em nenhum intermediário. Verificação é
+     soberania técnica.
+
+  5. tags: [verificação, soberania]
+  6. Salve:  :w
+
+Essa nota NÃO ramifica de nenhuma anterior — é uma raiz nova.
+Vai se conectar às outras através da hub note.
+
+
+
+==========================================================================
+  Lição 4.6: REFERÊNCIAS BIBLIOGRÁFICAS
+==========================================================================
+
+Agora vamos registrar as fontes na segunda caixa (biblio/).
+Fichas curtas: quem, onde, e ponteiros para os zettels relevantes.
+
+  EXERCÍCIO:
+  1. Volte aqui:  Space f b  → TUTOR.md
+
+  2. Pressione  Space z r
+  3. Título: "Arch Wiki — Checksum"
+  4. Preencha o frontmatter:
 
      source: https://wiki.archlinux.org/title/Checksum
      author: Arch Wiki
-     tags: [verification, opsec]
 
-  5. Em "Pontos-chave", escreva:
+  5. No corpo, escreva:
 
-     - Checksum é um hash do arquivo: se um bit muda, o hash muda
-     - SHA-256 é o padrão atual; MD5 é obsoleto e inseguro
-     - Verificar checksum confirma integridade, não autenticidade
-     - Para autenticidade, precisa de assinatura (GPG/PGP)
+     Referência sobre algoritmos de checksum, uso de sha256sum
+     e verificação de downloads.
 
-  6. Em "Citações", escreva:
+     Zettels relacionados:
 
-     > A checksum does not guarantee that the file has not been
-     > tampered with, it merely guarantees that it matches the
-     > original file.
+  6. Insira links com  Space z i  (2 vezes, um por linha):
+     → "Checksums provam integridade"
+     → "SHA-256 substituiu MD5"
 
   7. Salve:  :w
 
+  8. Repita para mais duas fontes:
 
-
-==========================================================================
-  Lição 4.2: SEGUNDA LITERATURE NOTE
-==========================================================================
-
-Fonte 2: assinaturas digitais e por que importam.
-
-  EXERCÍCIO:
-  1. Volte aqui:  Space f b  → TUTOR.md
-  2. Pressione  Space z r
-  3. Título: "GPG signatures explained"
-  4. Preencha o frontmatter:
+     --- fonte 2 ---
+     Volte aqui:  Space f b  → TUTOR.md
+     Space z r  → "GnuPG Manual — Digital Signatures"
 
      source: https://www.gnupg.org/gph/en/manual/x135.html
      author: GnuPG Project
-     tags: [verification, cryptography]
 
-  5. Em "Pontos-chave":
+     Corpo:
 
-     - Assinatura digital prova autoria e integridade
-     - Usa criptografia assimétrica: chave privada assina, pública verifica
-     - Diferente de checksum: checksum prova que não mudou,
-       assinatura prova QUEM criou
-     - Modelo de confiança: web of trust vs. CAs centralizadas
+     Referência sobre assinaturas digitais com GPG.
 
-  6. Em "Citações":
+     Zettels relacionados:
 
-     > A digital signature certifies and timestamps a document.
-     > If the document is subsequently modified in any way,
-     > a verification of the signature will fail.
+     Insira links:
+     → "Assinaturas digitais provam autenticidade"
+     → "Checksum não prova autoria"
 
-  7. Salve:  :w
+     Salve:  :w
 
-
-
-==========================================================================
-  Lição 4.3: TERCEIRA LITERATURE NOTE
-==========================================================================
-
-Fonte 3: o conceito "Don't trust, verify" na cultura cypherpunk.
-
-  EXERCÍCIO:
-  1. Volte aqui:  Space f b  → TUTOR.md
-  2. Pressione  Space z r
-  3. Título: "Don't trust, verify — origin and meaning"
-  4. Preencha o frontmatter:
+     --- fonte 3 ---
+     Volte aqui:  Space f b  → TUTOR.md
+     Space z r  → "Nakamoto Institute — Cypherpunk Library"
 
      source: https://nakamotoinstitute.org/library/
      author: Nakamoto Institute
-     tags: [verification, sovereignty]
 
-  5. Em "Pontos-chave":
+     Corpo:
 
-     - "Don't trust, verify" vem da cultura Bitcoin/cypherpunk
-     - Aplica-se além de crypto: software, comunicação, identidade
-     - Verificação é o oposto de autoridade: não precisa confiar
-       em ninguém se pode checar por conta própria
-     - Exige ferramentas: hashes, assinaturas, código aberto
+     Origem do princípio "Don't trust, verify".
 
-  6. Em "Notas" (última seção):
+     Zettels relacionados:
 
-     Esse princípio é a base de tudo que faço.
-     Conecta com open source (código auditável) e self-hosting
-     (infraestrutura verificável).
+     Insira link:
+     → "Verificar elimina a necessidade de confiar"
 
+     Salve:  :w
+
+Antes de seguir, vamos checar o vocabulário que construímos até aqui.
+
+  9. :!zk tag list --format full
+
+     Você deve ver: verificação (5 notas), criptografia (1), soberania (1),
+     hub (0 — ainda não criamos a hub note).
+
+     Se alguma tag está faltando, abra a nota e corrija o frontmatter.
+     Se aparecer uma tag inesperada, é typo — corrija agora.
+
+
+
+==========================================================================
+  Lição 4.7: VERIFICAR LINKS E BACKLINKS
+==========================================================================
+
+  EXERCÍCIO:
+  1. Abra o primeiro zettel:
+     Space z n  → "Checksums provam" → Enter
+
+  2. Pressione  Space z b  (backlinks)
+     → "SHA-256 substituiu MD5" e "Checksum não prova autoria"
+     devem aparecer (ambos ramificam desta nota)
+
+  3. Abra "Checksum não prova autoria":
+     Space z n  → "não prova" → Enter
+
+  4. Pressione  Space z l  (links que saem)
+     → "Checksums provam integridade" deve aparecer
+
+  5. Pressione  Space z b  (backlinks)
+     → "Assinaturas digitais provam autenticidade" deve aparecer
+
+  6. Teste hover:  cursor sobre um [[link]]  →  K
+  7. Teste go-to:  cursor sobre um [[link]]  →  gd
+  8. Volte:  Ctrl+o
+
+Agora a mesma coisa via  :!  — filtros de links do zk:
+
+  9. Quem linka para "Checksums provam integridade"?
+     :!zk list --link-to zettel/*checksums* --format oneline
+     → mesmas 2 notas que apareceram nos backlinks (passo 2)
+
+  10. Quais notas saem de "Checksum não prova autoria"?
+      :!zk list --linked-by zettel/*nao-prova* --format oneline
+      → "Checksums provam integridade" (mesma do passo 4)
+
+  11. Siga os backlinks recursivamente a partir da raiz:
+      :!zk list --link-to zettel/*checksums* --recursive --format oneline
+      → toda a cadeia deve aparecer, em profundidade
+      (--link-to = quem aponta para esta nota; --recursive = segue adiante)
+
+O grafo completo:
+
+  "Checksums provam integridade"
+   ├── "SHA-256 substituiu MD5"
+   └── "Checksum não prova autoria"
+        └── "Assinaturas digitais provam autenticidade"
+
+  "Verificar elimina a necessidade de confiar"  (raiz separada)
+
+
+
+==========================================================================
+  PARTE 5: ORGANIZAÇÃO — HUB NOTE E REGISTER
+==========================================================================
+
+
+==========================================================================
+  Lição 5.1: CRIAR UMA HUB NOTE
+==========================================================================
+
+Uma hub note é um zettel que mapeia as ramificações de um tópico.
+Funciona como uma visão de cima (bird's eye view) do terreno.
+
+Antes de escrever, veja a estrutura real do notebook.
+
+  EXERCÍCIO:
+  1. Gere o grafo completo:
+     :!zk graph --format json --quiet
+
+     Nós = notas, arestas = links. Note as duas raízes separadas
+     e a cadeia de Folgezettel. A hub note vai formalizar isso.
+
+  2. Filtre por tag:
+     :!zk graph --format json --tag verificação --quiet
+
+     Se alguma nota do argumento não apareceu, falta a tag.
+
+Agora escreva o mapa.
+
+  3. Pressione  Space z z
+  4. Título: "Hub — Verificação de software"
+  5. Escreva o corpo. Use  Space z i  para inserir cada link:
+
+     Verificação de software envolve três camadas:
+
+     Integridade — o arquivo não foi alterado:
+     - [[...checksums-provam-integridade]]
+       - [[...sha-256-substituiu-md5]]
+       - [[...checksum-nao-prova-autoria]]
+
+     Autenticidade — quem criou é quem diz ser:
+     - [[...assinaturas-digitais-provam-autenticidade]]
+
+     Princípio:
+     - [[...verificar-elimina-a-necessidade-de-confiar]]
+
+     Referências:
+     - [[...arch-wiki-checksum]]
+     - [[...gnupg-manual-digital-signatures]]
+     - [[...nakamoto-institute-cypherpunk-library]]
+
+  (Os nomes reais dos links serão preenchidos pelo  Space z i )
+
+  6. tags: [verificação, hub]
   7. Salve:  :w
 
+A hub note mostra a estrutura Folgezettel de forma explícita:
+indentação = ramificação. Ela NÃO é a nota principal — é um mapa.
+
 
 
 ==========================================================================
-  Lição 4.4: INSERIR LINKS NA FLEETING NOTE
+  Lição 5.2: ATUALIZAR O REGISTER
 ==========================================================================
 
-Agora vamos conectar a ideia original com as fontes que estudamos.
+O Register é o índice global. Poucas entradas, poucas notas por
+entrada. O objetivo é ter portas de entrada, não uma lista exaustiva.
 
   EXERCÍCIO:
-  1. Volte aqui:  Space f b  → TUTOR.md
+  1. Abra o Register:
+     Space z n  → "Register" → Enter
 
-  2. Abra a fleeting note:
-     Space z n  → digite "Verificar antes" → Enter
+  2. Substitua "(será preenchido ao longo do tutorial)" por três
+     entradas. Use  Space z i  para inserir cada link:
 
-  3. Vá para o final do texto. Pressione  G  (vai para a última linha)
-  4. Pressione  o  (abre linha abaixo e entra em insert mode)
-  5. Escreva:
+     **verificação** →  (insira link para "Hub — Verificação de software")
 
-     Fontes:
+     **criptografia** →  (insira link para "Assinaturas digitais provam autenticidade")
 
-  6. Pressione  Esc , depois  o  de novo
-  7. Agora insira um link:  Space z i
-  8. No Telescope, selecione "How to verify checksums"
-     → um [[link]] é inserido automaticamente
-
-  9. Pressione  o  e insira outro link:  Space z i
-     → selecione "GPG signatures explained"
-
-  10. Pressione  o  e insira o último:  Space z i
-      → selecione "Don't trust, verify"
-
-  11. Salve:  :w
-
-A fleeting note agora referencia as 3 fontes.
-O bloco final deve parecer algo como:
-
-  Fontes:
-  [[how-to-verify-checksums]]
-  [[gpg-signatures-explained]]
-  [[dont-trust-verify-origin-and-meaning]]
-
-
-
-==========================================================================
-  Lição 4.5: VERIFICAR LINKS E BACKLINKS
-==========================================================================
-
-  EXERCÍCIO:
-  1. Com a fleeting note aberta, pressione  Space z l
-     → as 3 literature notes devem aparecer (links que saem)
-
-  2. Agora abra uma literature note:
-     Space z n  → "How to verify checksums" → Enter
-
-  3. Pressione  Space z b
-     → a fleeting note "Verificar antes de confiar" deve aparecer
-     (backlink: alguém referencia esta nota)
-
-  4. Teste o hover preview:
-     Volte à fleeting note:  Ctrl+o
-     Coloque o cursor sobre um [[link]]
-     Pressione  K
-     → preview flutuante do conteúdo da nota
-
-  5. Teste go-to-definition:
-     Cursor sobre o [[link]]
-     Pressione  gd
-     → a nota abre
-     Volte com  Ctrl+o
-
-  6. Volte aqui:  Space f b  → TUTOR.md
-
-
-
-==========================================================================
-  Lição 4.6: ADICIONAR TAGS À FLEETING NOTE
-==========================================================================
-
-  EXERCÍCIO:
-  1. Abra a fleeting note:
-     Space z n  → "Verificar antes" → Enter
-
-  2. No frontmatter, edite a linha de tags:
-     tags: [verification, sovereignty, opsec]
+     **soberania** →  (insira link para "Verificar elimina a necessidade de confiar")
 
   3. Salve:  :w
 
-  4. Volte aqui:  Space f b  → TUTOR.md
+Três palavras-chave, cada uma apontando para UMA nota de entrada.
+A partir dessa nota, você navega pelas ramificações.
 
-  5. Teste a busca por tag:
-     Space z t  → selecione "verification"
-     → todas as notas deste tutorial devem aparecer
+Isso é o Register de Luhmann: mínimo, funcional, não-exaustivo.
 
-
-
-==========================================================================
-  PARTE 5: SÍNTESE — SUA TESE
-==========================================================================
-
-Você capturou a ideia (fleeting) e estudou as fontes (literature).
-Agora é hora de formular o argumento na sua voz.
-A permanent note é atômica: uma ideia, escrita sem depender de contexto.
 
 
 ==========================================================================
-  Lição 5.1: CRIAR A PERMANENT NOTE
+  Lição 5.3: VERIFICAR O SISTEMA COMPLETO
 ==========================================================================
 
   EXERCÍCIO:
-  1. Pressione  Space z p
-  2. Título: "Verificação é soberania técnica"
-  3. Preencha o frontmatter:
-
-     tags: [verification, sovereignty]
-     links: []
-
-  4. Escreva o corpo (pressione  i ). Use suas palavras.
-     Sugestão:
-
-     Verificar é o ato mais básico de soberania técnica.
-
-     Quando você baixa um binário e não confere o checksum, está
-     confiando que ninguém adulterou o arquivo entre o servidor e
-     a sua máquina. Quando você instala um pacote sem verificar a
-     assinatura GPG, está confiando que o repositório não foi
-     comprometido. Confiança sem verificação é fé — e fé não é
-     metodologia de engenharia.
-
-     Checksums provam integridade: o arquivo não mudou.
-     Assinaturas provam autenticidade: quem assinou é quem diz ser.
-     Código aberto prova auditabilidade: você pode ler o que vai rodar.
-
-     As três camadas juntas eliminam a necessidade de confiar em
-     qualquer intermediário. Isso não é paranoia. É engenharia.
-
-  5. Agora insira links para as fontes no final:
-     Pressione  Esc , depois  G  (última linha), depois  o
-     Escreva:
-
-     Fundamentação:
-
-  6. Insira links:  Space z i  (3 vezes, um por linha)
-     → selecione cada literature note
-
-  7. Salve:  :w
-
-
-
-==========================================================================
-  Lição 5.2: VERIFICAR O GRAFO
-==========================================================================
-
-  EXERCÍCIO:
-  1. Volte aqui:  Space f b  → TUTOR.md
-
-  2. Verifique os backlinks de uma literature note:
-     Space z n  → "GPG signatures" → Enter
-     Space z b
-     → devem aparecer: a fleeting note E a permanent note
-     (duas notas referenciam essa fonte)
-
-  3. Verifique os links da permanent note:
-     Space z n  → "Verificação é soberania" → Enter
-     Space z l
-     → as 3 literature notes devem aparecer
-
-  4. Procure notas órfãs:
+  1. Verifique notas órfãs:
      Space z o
-     → idealmente nenhuma nota do tutorial está órfã
+     → idealmente nenhuma nota está órfã
 
-  5. Reindexe para garantir:
+  2. Abra a hub note:
+     Space z n  → "Hub — Verificação" → Enter
+
+  3. Pressione  Space z l
+     → todas as notas devem aparecer (a hub aponta para todas)
+
+  4. Abra o Register:
+     Space z n  → "Register" → Enter
+     → os 3 pontos de entrada devem funcionar (gd sobre cada link)
+
+  5. Reindexe:
      Space z x
 
   6. Volte aqui:  Space f b  → TUTOR.md
 
+Três filtros de auditoria que o plugin não expõe — só via  :!
+
+  7. Notas órfãs (ninguém linka para elas):
+     :!zk list --orphan --format oneline
+     → o Register vai aparecer aqui — é esperado, ele é ponto de entrada,
+       ninguém linka para ele. Qualquer OUTRA nota órfã indica um link faltando.
+
+  8. Notas sem tags (esqueceu de taguear):
+     :!zk list --tagless --format oneline
+     → se aparecer, abra a nota e adicione tags no frontmatter
+
+  9. Backlinks faltando (A linka B, mas B não linka de volta para A):
+     :!zk list --missing-backlink --format oneline
+     → no Zettelkasten isso é normal (Folgezettel são unidirecionais),
+       mas vale revisar se alguma conexão bidirecional faz sentido
+
+Corrija o que aparecer. Os aliases da Lição 2.4 encurtam:
+  :!zk orphans     :!zk tagless     :!zk broken
+
+Seu Zettelkasten agora tem:
+
+  zettel/    5 notas-ideia + 1 hub note
+  biblio/    3 referências bibliográficas
+  Register   3 pontos de entrada
+
 
 
 ==========================================================================
-  PARTE 6: ESCRITA — O POST
+  PARTE 6: DO ZETTELKASTEN AO TEXTO
 ==========================================================================
 
-Você tem: 1 fleeting note (ideia), 3 literature notes (fontes),
-1 permanent note (tese). O material está pronto. Hora de escrever.
-
-
-==========================================================================
-  Lição 6.1: CRIAR O RASCUNHO DO POST
-==========================================================================
-
-Posts ficam em content/posts/. Vamos criar o rascunho.
-
-  EXERCÍCIO (no terminal):
-  1. Saia do Neovim:  :qa
-  2. Volte à raiz do projeto:
-     cd ..
-  3. Crie o post:
-     hugo new posts/verificar-antes-de-confiar/index.md
-  4. Abra o post:
-     nvim content/posts/verificar-antes-de-confiar/index.md
-
+O Zettelkasten não é um rascunho. É matéria-prima estruturada.
+A hub note mostra o argumento; os zettels fornecem os blocos.
+Agora vamos montar um texto a partir deles.
 
 
 ==========================================================================
-  Lição 6.2: ESCREVER O POST
+  Lição 6.1: REUNIR O MATERIAL
 ==========================================================================
 
-O post é a destilação de tudo que você construiu no Zettelkasten.
-A permanent note é o esqueleto. As literature notes são as fontes.
+A hub note é o roteiro. Mas antes de escrever, use a busca do zk
+para localizar trechos e conexões que podem ter passado batido.
 
   EXERCÍCIO:
-  1. Edite o frontmatter:
+  1. Releia a hub note — é o esqueleto do texto:
+     Space z n  → "Hub — Verificação" → Enter
 
-     ---
-     title: "Verificar antes de confiar"
-     date: 2026-03-06
-     draft: true
-     description: "Checksums, assinaturas e por que 'confia em mim' não é argumento técnico."
-     tags: ["verificação", "soberania", "opsec"]
-     ---
+  2. Volte ao TUTOR:  Space f b  → TUTOR.md
 
-  2. Escreva o post. Use a permanent note como base e expanda.
-     Sugestão de estrutura:
+  3. Busque todos os zettels sobre o tema (excluindo referências):
+     :!zk list --tag verificação --exclude biblio/ --format medium
+
+  4. Existe alguma nota que MENCIONA "checksum" sem link explícito?
+     :!zk list --mention zettel/*checksums*
+     (--mention busca o TÍTULO da nota no corpo de outras, mesmo sem [[link]])
+
+  5. Busca full-text para localizar um trecho específico:
+     :!zk list --match "criptografia assimétrica" --format oneline
+
+  6. Busca com regex (para variações de grafia):
+     :!zk list --match "SHA-?256" --match-strategy re
+
+  7. Notas possivelmente relacionadas que você não linkou:
+     :!zk list --related zettel/*assinaturas* --format oneline
+
+
+
+==========================================================================
+  Lição 6.2: ESCREVER O RASCUNHO
+==========================================================================
+
+Use a hub note como roteiro e os zettels como blocos de construção.
+Cada zettel vira um trecho do texto — expandido, editado, com voz
+de publicação. O rascunho fica dentro do próprio notebook.
+
+  EXERCÍCIO:
+  1. Crie o rascunho:
+     :e drafts/verificar-antes-de-confiar.md
+
+     (O Neovim cria o arquivo ao salvar. A pasta drafts/ separa
+     rascunhos das notas atômicas — não é indexada pelo zk.)
+
+  2. Escreva seguindo a estrutura da hub note:
+
+     # Verificar antes de confiar
 
      Parágrafo de abertura — o problema.
-     "Todo software que você baixa pode ter sido adulterado."
+     (baseado em "Verificar elimina a necessidade de confiar")
 
      ## Checksum: o arquivo não mudou
-     Baseie-se na literature note "How to verify checksums".
-     Explique SHA-256, mostre um exemplo prático.
+     (baseado em "Checksums provam integridade" + "SHA-256 substituiu MD5")
+
+     ## O checksum não é suficiente
+     (baseado em "Checksum não prova autoria")
 
      ## Assinatura: quem criou é quem diz ser
-     Baseie-se em "GPG signatures explained".
-     Explique a diferença entre integridade e autenticidade.
+     (baseado em "Assinaturas digitais provam autenticidade")
 
      ## Don't trust, verify
-     Baseie-se em "Don't trust, verify — origin and meaning".
-     Conecte com a filosofia do site.
+     (baseado em "Verificar elimina a necessidade de confiar")
 
      Parágrafo de fechamento — a tese.
-     "Verificar é o ato mais básico de soberania técnica."
 
-  3. Salve:  :w
+  3. Crie a pasta e salve:
+     :!mkdir -p drafts
+     :w
 
-O post está em draft: true. Quando estiver pronto para publicar,
-mude para draft: false e defina a data.
+  4. Para o zk não indexar os rascunhos, adicione ao config.toml:
+     :e .zk/config.toml
+     → Na seção [note], adicione:
+       exclude = ["drafts/*"]
+     → Salve:  :w  → Volte:  Space f b  → TUTOR.md
+
+O rascunho é a destilação. O Zettelkasten é o laboratório.
+O argumento já existia nas conexões entre as notas — o texto
+apenas lineariza o que o sistema já tinha organizado.
+
+Daqui, o rascunho pode virar qualquer coisa: um post de blog,
+um artigo, um capítulo, um email. O formato de publicação é
+problema do seu framework — o Zettelkasten já fez o trabalho
+pesado.
 
 
 
@@ -786,31 +1087,99 @@ mude para draft: false e defina a data.
   Lição 6.3: RESULTADO FINAL
 ==========================================================================
 
-Abra outro terminal e verifique o que foi construído:
+Verifique o que foi construído:
 
   EXERCÍCIO:
   1. Veja as notas:
-     cd notes && zk list --format "{{title}} — {{path}}"
+     :!zk list --format "{{title}} — {{path}}"
 
-  2. Veja o grafo de links:
-     zk graph --format json | head -50
-
-  3. Veja o post:
-     cat ../content/posts/verificar-antes-de-confiar/index.md
-
-  4. Rode o Hugo:
-     cd .. && hugo server -D
-
-  5. Abra no browser: http://localhost:1313
-     O post deve aparecer (é draft, mas -D mostra drafts).
+  2. Veja o rascunho:
+     :e drafts/verificar-antes-de-confiar.md
+     → Confira o conteúdo, volte:  Space f b  → TUTOR.md
 
 Você completou o ciclo:
-  ideia → fontes → tese → post
+  notas atômicas → ramificações (Folgezettel) → hub → texto
 
-  fleeting/   1 nota   "Verificar antes de confiar"
-  literature/ 3 notas  checksums, GPG, don't trust verify
-  permanent/  1 nota   "Verificação é soberania técnica"
-  post        1 draft  content/posts/verificar-antes-de-confiar/
+  zettel/    5 notas-ideia + 1 hub note
+  biblio/    3 referências bibliográficas
+  Register   3 pontos de entrada
+  drafts/    1 rascunho pronto para publicar
+
+
+
+==========================================================================
+  PARTE 7: MÉTODO ORIGINAL vs. INTERPRETAÇÕES MODERNAS
+==========================================================================
+
+Agora que você praticou o método original, vale entender as
+variações e por que existem.
+
+  LUHMANN (original)         AHRENS (2017)
+  ─────────────────          ───────────────
+  Uma caixa de ideias        Fleeting notes
+  Uma caixa de refs          Literature notes
+  (sem tipo de nota)         Permanent notes
+  Folgezettel (posição)      Links [[wiki]]
+  Register (pontos entrada)  Tags
+  Hub notes                  MOC / Structure notes
+
+                             ESTE TUTORIAL
+                             ──────────────
+                             zettel/
+                             biblio/
+                             (sem tipo de nota)
+                             Links + "Continua de" / "Ramifica de"
+                             _register.md
+                             Hub notes
+
+Nenhuma abordagem está "errada". Mas saber O QUE FOI MUDADO permite
+que você faça escolhas informadas em vez de seguir um guia cegamente.
+
+O debate Folgezettel vs. links-only continua ativo na comunidade.
+A posição deste tutorial: use ambos. O link digital é prático; a
+decisão de posicionamento ("Continua de" / "Ramifica de") é
+cognitivamente valiosa.
+
+Onde Ahrens distorce Luhmann:
+
+  1. A classificação fleeting/literature/permanent não existia.
+     Luhmann escrevia zettels. Não categorizava por "estágio".
+
+  2. O pipeline linear (captura → pesquisa → síntese) é uma
+     invenção editorial. Luhmann não seguia uma sequência fixa.
+
+  3. "Literature notes" em Ahrens são citações no gerenciador
+     de referências — não notas de leitura dentro do Zettelkasten.
+
+  4. O livro vende mais do que explica. Bob Doto escreveu
+     "A System for Writing" como complemento prático justamente
+     por causa das confusões que persistiam nos leitores de Ahrens.
+
+Onde Ahrens acerta:
+
+  1. Tornou o método acessível. Antes do livro, Zettelkasten era
+     uma lenda acadêmica.
+
+  2. A ênfase em "escrever nas suas palavras" é fiel ao original.
+
+  3. Mostrou que o método se aplica além da academia.
+
+Para aprofundar:
+
+  zettelkasten.de
+    O site mais fiel ao método original. O fórum tem debates
+    detalhados sobre Folgezettel, register, e organização.
+
+  Schmidt, Johannes (2016). "Niklas Luhmann's Card Index"
+    Estudo acadêmico do sistema original, baseado no acervo
+    físico (agora digitalizado pela Universidade de Bielefeld).
+
+  Bob Doto, "A System for Writing" (2024)
+    Complementa Ahrens com prática concreta e menos venda.
+
+  niklas-luhmann-archiv.de
+    O arquivo digital do Zettelkasten original de Luhmann.
+    90.000 fichas digitalizadas e navegáveis.
 
 
 
@@ -820,26 +1189,67 @@ Você completou o ciclo:
 
   NEOVIM
 
-  Space z n  ···  listar notas          Space z f  ···  nova fleeting
-  Space z s  ···  buscar conteúdo       Space z r  ···  nova literature
-  Space z t  ···  navegar tags          Space z p  ···  nova permanent
-  Space z b  ···  backlinks             Space z i  ···  inserir link
-  Space z l  ···  links                 Space z x  ···  reindexar
+  Space z n  ···  listar notas          Space z z  ···  novo zettel
+  Space z s  ···  buscar conteúdo       Space z r  ···  nova referência
+  Space z t  ···  navegar tags          Space z i  ···  inserir link
+  Space z b  ···  backlinks             Space z x  ···  reindexar
+  Space z l  ···  links
   Space z o  ···  notas órfãs
 
   gd  ··········  abrir nota do link    Ctrl+o  ····  voltar
   K   ··········  preview flutuante     Space f b ··  listar buffers
   [[  ··········  autocomplete links    :w  ········  salvar
 
-  TERMINAL
+  TERMINAL — CRIAR
 
-  zk f "título"   nova fleeting         zk list           listar todas
-  zk l "título"   nova literature       zk list --tag X   filtrar por tag
-  zk p "título"   nova permanent        zk edit -i        busca interativa
+  zk z "título"       novo zettel (alias)
+  zk b "título"       nova referência (alias)
+  zk new -n zettel    dry-run — mostra o resultado sem criar o arquivo
 
-  WORKFLOW
+  TERMINAL — BUSCAR E NAVEGAR
 
-  Captura (fleeting) → Pesquisa (literature) → Síntese (permanent) → Post
+  zk list                        listar todas
+  zk list --tag X                filtrar por tag
+  zk list --match "termo"        busca full-text
+  zk list --match "X" -M re     busca com regex
+  zk list --match "X" -M exact  busca exata
+  zk list --link-to PATH        quem linka para PATH (= backlinks)
+  zk list --linked-by PATH      notas linkadas a partir de PATH
+  zk list --link-to P -r        seguir backlinks recursivamente
+  zk list --related PATH        notas possivelmente relacionadas
+  zk list --mention PATH        mencionam o título (sem [[link]])
+  zk list --exclude biblio/     excluir diretório
+  zk list --created-after "last week"  notas recentes
+  zk edit -i                     busca interativa (abre no nvim)
+  zk edit --tag X                editar notas com tag X
+
+  TERMINAL — AUDITAR
+
+  zk orphans                  notas sem backlinks (alias)
+  zk tagless                  notas sem tags (alias)
+  zk broken                   backlinks faltando (alias)
+  zk tags                     listar tags com contagem (alias)
+  zk graph                    grafo JSON completo (alias)
+
+  Sem alias:
+  zk list --orphan            zk list --tagless
+  zk list --missing-backlink  zk tag list --format full
+  zk graph --format json --tag X
+  zk graph --format json --link-to P -r
+
+  CONVENÇÕES FOLGEZETTEL (digital)
+
+  "Continua de [[nota]]"    esta nota dá seguimento ao pensamento
+  "Ramifica de [[nota]]"    esta nota contrasta ou abre variação
+  (sem referência)          esta nota é uma raiz — novo tópico
+
+  ESTRUTURA
+
+  notes/
+  ├── zettel/        a caixa principal (ideias atômicas + hubs)
+  ├── biblio/        referências bibliográficas
+  ├── _register.md   índice de pontos de entrada
+  └── .zk/           configuração do zk (gerado)
 
 ==========================================================================
 
