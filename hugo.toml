@@ -117,7 +117,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
     # nostr = "npub1..."
     mastodon = "https://social.luisbarcia.com/@luis"
     matrix = "@luis:luisbarcia.com"
-    # linkedin = ""
+    linkedin = "https://www.linkedin.com/in/luis-paulo-barcia-de-mattos"
 
   # --- Crypto / PGP ---
   [params.crypto]
